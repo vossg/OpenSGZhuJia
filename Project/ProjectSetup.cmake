@@ -18,3 +18,7 @@ if(NOT WIN32 AND NOT CMAKE_BUILD_TYPE)
       "Choose the type of build, options are: Debug Release."
       FORCE)
 endif()
+
+SET(${${_JPPRE}ADDITIONAL_CONFIGURE_LINES}     "")
+SET(${${_JPPRE}ADDITIONAL_CONFIGURE_VER_LINES} "")
+
