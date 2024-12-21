@@ -1,0 +1,33 @@
+
+if(NOT DEFINED JIAN_PRJ_PREFIX)
+  set(_JPPRE "JIAN_")
+else()
+  set(_JPPRE ${JIAN_PRJ_PREFIX})
+endif()
+
+if(NOT DEFINED JIAN_FILE_PREFIX)
+  set(_JFPRE "")
+else()
+  set(_JFPRE ${JIAN_FILE_PREFIX})
+endif()
+
+if(NOT DEFINED JIAN_TARGET_PREFIX)
+  set(_JTPRE "")
+else()
+  set(_JTPRE ${JIAN_TARGET_PREFIX})
+endif()
+
+if(NOT DEFINED JIAN_CID_PREFIX)
+  if(NOT _JPPRE)
+  set(_JCPRE "JIAN_")
+  else()
+    set(_JCPRE ${_JPPRE})
+  endif()
+else()
+  set(_JCPRE ${JIAN_CID_PREFIX})
+endif()
+
+message(STATUS "using cmake   prefix ${_JCPRE}")
+message(STATUS "using project prefix ${_JPPRE}")
+
+message(STATUS "using target  prefix ${_JTPRE}")
