@@ -62,33 +62,35 @@ endmacro()
 
 MACRO(${_JCPRE}RESET_LIBRARY_PROJECT)
 
-  set(${${_JPPRE}TARGET_NAME}_BASE_DIR   "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_BASE_DIR        "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_SRC        "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_INS        "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_SRC             "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_INS             "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_HDR        "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_PUBLIC_HDR "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_HDR             "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_PUBLIC_HDR      "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_INL        "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_PUBLIC_INL "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_INL             "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_PUBLIC_INL      "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_APP_SRC    "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_TEST_SRC   "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_UTEST_SRC  "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_APP_SRC         "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_TEST_SRC        "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_UTEST_SRC       "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_ll         "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_yy         "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_ll              "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_yy              "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_EXCL_FILES "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_EXCL_FILES      "" CACHE INTERNAL "")
 
 
-  set(${${_JPPRE}TARGET_NAME}_SRC_PATTERNS       "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_HDR_PATTERNS       "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_INL_PATTERNS       "" CACHE INTERNAL "")
-  set(${${_JPPRE}TARGET_NAME}_INS_PATTERNS       "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_SRC_PATTERNS    "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_HDR_PATTERNS    "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_INL_PATTERNS    "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_INS_PATTERNS    "" CACHE INTERNAL "")
 
-  set(${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR      "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR   "" CACHE INTERNAL "")
+
+  set(${${_JPPRE}TARGET_NAME}_PUB_DEP_TARGETS "" CACHE INTERNAL "")
 
   if(FALSE)
     SET(${PROJECT_NAME}_DEP_PUBLIC_INCDIR            )
@@ -448,7 +450,12 @@ function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
                  PROPERTY DEBUG_POSTFIX           D)
   endif()
 
-  target_link_libraries(${${_JPPRE}TARGET_NAME} ${_JTPRE}::compiler_settings)
+  target_link_libraries(${${_JPPRE}TARGET_NAME} PUBLIC ${_JTPRE}::compiler_settings)
+
+  foreach(_PUB_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_PUB_DEP_TARGETS})
+    target_link_libraries(${${_JPPRE}TARGET_NAME} PUBLIC ${${_PUB_DEP_TARGET}})
+  endforeach()
+
 
   install(EXPORT      ${${_JPPRE}TARGET_NAME}Targets 
           NAMESPACE   ${${_JPPRE}PROJECT_TARGET_NAME}::
@@ -506,11 +513,34 @@ function(${_JCPRE}SETUP_CONFIGURED_H _SRC_CFGFILE _TARGET_CFGFILE)
                      "${_SRC_CFGFILE}"
                      "${_TARGET_CFGFILE}.tmp.cmake")
 
-  foreach(_ADD_CONFIGURE_LINE ${${_JPPRE}_ADDITIONAL_CONFIGURE_LINES})
+  foreach(_ADD_CONFIGURE_LINE ${${_JPPRE}ADDITIONAL_CONFIGURE_LINES})
     file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
   endforeach()
 
   file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n#endif // _${_JPPRE}CONFIGURED_H_\n")
+
+  configure_file("${_TARGET_CFGFILE}.tmp.cmake"
+                 "${_TARGET_CFGFILE}.tmp")
+
+  execute_process(
+    COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                     "${_TARGET_CFGFILE}.tmp"
+                     "${_TARGET_CFGFILE}"    )
+
+endfunction()
+
+function(${_JCPRE}SETUP_CONFIGURED_VERSION_H _SRC_CFGFILE _TARGET_CFGFILE)
+
+  execute_process(
+    COMMAND "${CMAKE_COMMAND}" -E copy
+                     "${_SRC_CFGFILE}"
+                     "${_TARGET_CFGFILE}.tmp.cmake")
+
+  foreach(_ADD_CONFIGURE_LINE ${${_JPPRE}ADDITIONAL_CONFIGURE_VER_LINES})
+    file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
+  endforeach()
+
+  file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n#endif // _${_JPPRE}CONFIGUREDVERSIONS_H_\n")
 
   configure_file("${_TARGET_CFGFILE}.tmp.cmake"
                  "${_TARGET_CFGFILE}.tmp")

@@ -60,3 +60,41 @@ function(fixupTargetConfigs _tgt)
 
 ENDFUNCTION()
 
+#############################################################################
+# import target mapping
+#############################################################################
+
+macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
+
+  if(GIT_FOUND)
+    if(EXISTS ${DIRECTORY}/.git)
+    
+      execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
+                      WORKING_DIRECTORY ${DIRECTORY}
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_COUNT 
+                      OUTPUT_STRIP_TRAILING_WHITESPACE                )
+
+      EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+                      WORKING_DIRECTORY ${DIRECTORY}
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_ABBREV_HEAD 
+                      OUTPUT_STRIP_TRAILING_WHITESPACE                )
+
+      EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+                      WORKING_DIRECTORY ${DIRECTORY}
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_HEAD 
+                      OUTPUT_STRIP_TRAILING_WHITESPACE                )
+
+      EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} show -s --format=%ai HEAD
+                      WORKING_DIRECTORY ${DIRECTORY}
+                      OUTPUT_VARIABLE ${NAME}_WC_REVISION_DATE 
+                      OUTPUT_STRIP_TRAILING_WHITESPACE                )
+
+      SET(${NAME}_WC_REVISION_ID "${_${NAME}_WC_REVISION_COUNT}_${_${NAME}_WC_REVISION_ABBREV_HEAD}_${_${NAME}_WC_REVISION_HEAD}")
+    ELSE()
+      SET(${NAME}_WC_REVISION -1)
+    ENDIF()
+  ELSE()
+    SET(${NAME}_WC_REVISION -2)
+  ENDIF()
+  
+endmacro() # FIND_REVISION_GIT)
