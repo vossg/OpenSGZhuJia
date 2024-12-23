@@ -58,3 +58,44 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
 
 endmacro()
 
+macro(${_JCPRE}SETUP_OPENGL)
+
+  set(_OGL_COMPONENTS OpenGL)
+
+  if(LINUX)
+    list(APPEND _OGL_COMPONENTS GLX)
+  else()
+    set(${_JPPRE}GLX_LIB ${_JPPRE}GLX_LIB-NOTFOUND)
+  endif()
+
+  if(LINUX AND NOT ${_JPPRE}NO_EGL)
+    list(APPEND _OGL_COMPONENTS EGL)
+  else()
+    set(${_JPPRE}EGL_LIB ${_JPPRE}EGL_LIB-NOTFOUND)
+  endif()
+
+  if(NOT ${_JPPRE}NO_OPENGL)
+    find_package(OpenGL COMPONENTS ${_OGL_COMPONENTS})
+
+    if(NOT ${_JPPRE}NO_EGL AND OpenGL_EGL_FOUND)
+      set(${_JPPRE}WITH_EGL   1          )
+      set(${_JPPRE}EGL_TARGETS OpenGL::EGL)
+    endif()
+
+    if(OpenGL_OpenGL_FOUND)
+      set(${_JPPRE}GL_TARGETS OpenGL::GL)
+    endif()
+    if(OpenGL_GLX_FOUND)
+      set(${_JPPRE}GLX_TARGETS OpenGL::GLX)
+    endif()
+    if(OPENGL_GLU_FOUND)
+      set(${_JPPRE}GLU_TARGETS OpenGL::GLU)
+    endif()
+  endif()
+
+  message(STATUS " opengl: OpenGL : ${OpenGL_OpenGL_FOUND}")
+  message(STATUS "         GLX    : ${OpenGL_GLX_FOUND}"   )
+  message(STATUS "         EGL    : ${OpenGL_EGL_FOUND}"   )
+  message(STATUS "         GLU    : ${OPENGL_GLU_FOUND}"   )
+
+endmacro()
