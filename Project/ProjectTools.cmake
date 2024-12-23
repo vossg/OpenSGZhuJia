@@ -11,10 +11,20 @@ macro(${_JCPRE}COMMON_TARGETS)
   add_dependencies (${_JTPRE}All ${_JTPRE}AllApps)
 
   # optional pass for test programs
-  if(${_JTPRE}BUILD_TESTS)
+  if(${_JPPRE}BUILD_TESTS)
     add_custom_target(             ${_JTPRE}AllTests)
     add_dependencies (${_JTPRE}All ${_JTPRE}AllTests)
   endif() 
+
+  if(${_JPPRE}BUILD_UNITTESTS)
+    add_custom_target(             ${_JTPRE}AllUTests)
+    add_dependencies (${_JTPRE}All ${_JTPRE}AllUTests)
+  endif()
+
+  if(${_JPPRE}BUILD_UNITBENCH)
+    add_custom_target(             ${_JTPRE}AllUBench)
+    add_dependencies (${_JTPRE}All ${_JTPRE}AllUBench)
+  endif()
 
   add_custom_target(                ${_JTPRE}AllLibs       )
   add_custom_target(                ${_JTPRE}AllContribLibs)
@@ -65,6 +75,8 @@ ENDFUNCTION()
 #############################################################################
 
 macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
+
+  find_package(Git)
 
   if(GIT_FOUND)
     if(EXISTS ${DIRECTORY}/.git)
@@ -143,6 +155,14 @@ endmacro()
 # passes
 #############################################################################
 
+macro(${_JCPRE}PRINT_DEPENDENCY_STATES)
+  message(STATUS "----- dependencies -----")
+  foreach(_DEP_STATE ${${_JCPRE}DEPENDENCY_STATES})
+    message(STATUS "${_DEP_STATE}")
+  endforeach()
+  message(STATUS "----- dependencies -----")
+endmacro()
+
 macro(${_JCPRE}RUN_PREPARE _PRJPREP)
 
   if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare3.cmake")
@@ -181,13 +201,15 @@ macro(${_JCPRE}RUN_PREPARE _PRJPREP)
     endif()
   endforeach()
 
+  foreach(_EXTRA_PREPARE ${${_JPPRE}EXTRA_PREPARE})
+    if(EXISTS ${_EXTRA_PREPARE})
+      include(${_EXTRA_PREPARE})
+    endif()
+  endforeach()
+
 endmacro()
 
 macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
-
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
-    include("${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
-  endif()
 
   foreach(_LIB_CFG ${${_JPPRE}LIBRARY_CONFIG_FILES})
 
@@ -222,6 +244,16 @@ macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
     endif()
   endforeach()
 
+  foreach(_EXTRA_FINALIZE ${${_JPPRE}EXTRA_FINALIZE})
+    if(EXISTS ${_EXTRA_FINALIZE})
+      include(${_EXTRA_FINALIZE})
+    endif()
+  endforeach()
+
+  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
+    include("${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
+  endif()
+
 endmacro()
 
 macro(${_JCPRE}RUN_PASSES)
@@ -234,6 +266,7 @@ macro(${_JCPRE}RUN_PASSES)
             "\nPASS : ${${_JPPRE}CMAKE_PASS} in ${${_JPPRE}PASSDIR_${PASS}}\n")
 
     foreach(_LIBCONFIGFILE ${${_JPPRE}LIBRARY_CONFIG_FILES})
+
       get_filename_component(_LIBCONFIGDIR "${_LIBCONFIGFILE}" PATH)
       get_filename_component(_LIBFILENAME  "${_LIBCONFIGFILE}" NAME)
 
@@ -251,6 +284,7 @@ macro(${_JCPRE}RUN_PASSES)
 
       add_subdirectory("${_LIBCONFIGDIR}" 
                        "${${_JPPRE}PASSDIR_${PASS}}/${_LIBFILENAME}")
+
     endforeach() # _LIBCONFIGFILE
 
     set(${_JPPRE}MAIN_LIB_TARGET ${_JTPRE}AllContribLibs)
@@ -261,5 +295,91 @@ macro(${_JCPRE}RUN_PASSES)
         "External/${_EXTERNAL_CONFIG}/${${_JPPRE}PASSDIR_${PASS}}")
     endforeach() # _EXTERNAL_CONFIG
   endforeach() # _PASS
+
+endmacro()
+
+#############################################################################
+# export
+#############################################################################
+
+macro(${_JCPRE}SORT_TARGET_LIST)
+
+  #_STL
+  set(_TARGETLIST_WORK ${${_JPPRE}TARGET_LIST})
+
+  list(REVERSE _TARGETLIST_WORK)
+
+  #_STR
+  set(_TARGETLIST_RESULT "")
+  set(_RETRYCOUNT        50)
+
+  #_STLT
+  foreach(_TL_ITEM ${_TARGETLIST_WORK})
+    set(${_TL_ITEM}_DEPLIST ${${_TL_ITEM}_PUB_PRJ_TARGETS})
+  endforeach()
+
+  while(_TARGETLIST_WORK)
+
+    #_STET
+    set(_TARGETLIB_EMPTY "")
+
+    #_STLT
+    foreach(_TL_ITEM ${_TARGETLIST_WORK})
+      if(NOT ${_TL_ITEM}_DEPLIST)
+        list(APPEND _TARGETLIB_EMPTY ${_TL_ITEM})
+      endif()
+    endforeach()
+
+    list(REMOVE_ITEM _TARGETLIST_WORK   ${_TARGETLIB_EMPTY})
+    list(APPEND      _TARGETLIST_RESULT ${_TARGETLIB_EMPTY})
+
+    foreach(_TL_ITEM ${_TARGETLIST_WORK})
+      list(REMOVE_ITEM ${_TL_ITEM}_DEPLIST ${_TARGETLIB_EMPTY})
+    endforeach()
+
+    math(EXPR _RETRYCOUNT "${_RETRYCOUNT} - 1")
+
+    if(_RETRYCOUNT EQUAL 0)
+      break()
+    endif()
+
+  endwhile()
+
+  if(_RETRYCOUNT EQUAL 0 AND _TARGETLIST_WORK)
+    message(SEND_ERROR "fatal could not sort target list within 50 steps")
+  endif()
+
+  set(${_JPPRE}SORTED_TARGET_LIST ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
+
+  message(STATUS "sorted targets :")
+  message(STATUS "  ${${_JPPRE}SORTED_TARGET_LIST}")
+  message(STATUS "    from ${${_JPPRE}TARGET_LIST}")
+
+endmacro()
+
+macro(${_JCPRE}EXPORT_MAIN_PROJECT)
+
+  write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}ConfigVersion.cmake
+
+    VERSION       ${${${_JPPRE}TARGET_NAME_UC}_VERSION_STRING}
+    COMPATIBILITY SameMajorVersion                                           )
+
+  configure_package_config_file(
+    ${CMAKE_SOURCE_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
+    ${${_JPPRE}TARGET_NAME}Config.cmake
+
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
+
+
+  install(FILES       
+            ${PROJECT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake
+            ${PROJECT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}ConfigVersion.cmake
+
+          DESTINATION 
+            ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME} 
+
+          COMPONENT   
+            dev                                                            )
 
 endmacro()
