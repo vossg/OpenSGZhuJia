@@ -27,7 +27,16 @@ else()
   set(_JCPRE ${JIAN_CID_PREFIX})
 endif()
 
+if(NOT DEFINED JIAN_GEN_SUFFIX)
+  set   (_JGSUF "fcd")
+else()
+  set(_JGSUF ${JIAN_GEN_SUFFIX})
+endif()
+
+string(TOUPPER ${_JGSUF} _JGSUF_UC)
+
 message(STATUS "using cmake   prefix ${_JCPRE}")
 message(STATUS "using project prefix ${_JPPRE}")
 
 message(STATUS "using target  prefix ${_JTPRE}")
+message(STATUS "using gen     suffix ${_JGSUF}/${_JGSUF_UC}")
