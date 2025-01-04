@@ -120,13 +120,13 @@ macro(${_JCPRE}COLLECT_LIBRARIES)
   # Find files describing libraries to build, but make sure base
   # and system are processed first
   #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_BASE RELATIVE "${CMAKE_SOURCE_DIR}"
-  #     "Source/CMakeLists3.Lib.OSGBase.txt")
+  #     "Source/CMakeLists${_CMVER_}.Lib.OSGBase.txt")
 
   #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_SYSTEM RELATIVE "${CMAKE_SOURCE_DIR}"
-  #     "Source/CMakeLists3.Lib.OSGSystem.txt")
+  #     "Source/CMakeLists${_CMVER_}.Lib.OSGSystem.txt")
 
   file(GLOB_RECURSE _LIB_CFG_FILES RELATIVE "${CMAKE_SOURCE_DIR}"
-     "Source/*CMakeLists3.Lib.*.txt")
+     "Source/*CMakeLists${_CMVER_}.Lib.*.txt")
 
   #file(REMOVE_ITEM _OSG_LIBRARY_CONFIG_FILES ${OSG_LIBRARY_CONFIG_FILE_BASE})
   #file(REMOVE_ITEM _OSG_LIBRARY_CONFIG_FILES ${OSG_LIBRARY_CONFIG_FILE_SYSTEM})
@@ -165,8 +165,8 @@ endmacro()
 
 macro(${_JCPRE}RUN_PREPARE _PRJPREP)
 
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare3.cmake")
-    include("${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare3.cmake")
+  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
+    include("${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
   endif()
 
   foreach(_LIB_CFG ${${_JPPRE}LIBRARY_CONFIG_FILES})
@@ -180,7 +180,7 @@ macro(${_JCPRE}RUN_PREPARE _PRJPREP)
                             NAME           )
 
 
-    string(REPLACE CMakeLists3.Lib. "" _LIBCFG_BASENAME_1
+    string(REPLACE CMakeLists${_CMVER_}.Lib. "" _LIBCFG_BASENAME_1
            ${_LIBCFG_BASENAME})
 
     get_filename_component(_LIBCFG_BASENAME
@@ -189,15 +189,15 @@ macro(${_JCPRE}RUN_PREPARE _PRJPREP)
 
     set(_LIB_BASEDIR ${CMAKE_CURRENT_SOURCE_DIR}/${_LIB_CFG_DIR})
 
-    if(EXISTS "${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Prepare3.cmake")
-      include("${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Prepare3.cmake")
+    if(EXISTS "${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Prepare${_CMVER_}.cmake")
+      include("${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Prepare${_CMVER_}.cmake")
     endif()
 
   endforeach() # _SENLIN_LIBRARY_CONFIG
 
   foreach(_EXTERNAL_CFG ${${_JPPRE}EXTERNAL_CONFIGS})
-    if(EXISTS ${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Prepare3.cmake)
-      include(${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Prepare3.cmake)
+    if(EXISTS ${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Prepare${_CMVER_}.cmake)
+      include(${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Prepare${_CMVER_}.cmake)
     endif()
   endforeach()
 
@@ -222,7 +222,7 @@ macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
                             NAME           )
 
 
-    string(REPLACE CMakeLists3.Lib. "" _LIBCFG_BASENAME_1
+    string(REPLACE CMakeLists${_CMVER_}.Lib. "" _LIBCFG_BASENAME_1
            ${_LIBCFG_BASENAME})
 
     get_filename_component(_LIBCFG_BASENAME
@@ -232,15 +232,15 @@ macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
     set(_LIB_BASEDIR ${CMAKE_CURRENT_SOURCE_DIR}/${_LIB_CFG_DIR})
 
 
-    if(EXISTS "${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Finalize3.cmake")
-      include("${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Finalize3.cmake")
+    if(EXISTS "${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Finalize${_CMVER_}.cmake")
+      include("${_LIB_BASEDIR}/${_LIBCFG_BASENAME}.Finalize${_CMVER_}.cmake")
     endif()
 
   endforeach() # _SENLIN_LIBRARY_CONFIG
 
   foreach(_EXTERNAL_CFG ${${_JPPRE}EXTERNAL_CONFIGS})
-    if(EXISTS ${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Finalize3.cmake)
-      include(${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Finalize3.cmake)
+    if(EXISTS ${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Finalize${_CMVER_}.cmake)
+      include(${${_JPPRE}${_EXTERNAL_CFG}_SOURCE_DIR}/${_EXTERNAL_CFG}.Finalize${_CMVER_}.cmake)
     endif()
   endforeach()
 
@@ -250,8 +250,8 @@ macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
     endif()
   endforeach()
 
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
-    include("${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize3.cmake")
+  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
+    include("${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
   endif()
 
 endmacro()
@@ -270,8 +270,8 @@ macro(${_JCPRE}RUN_PASSES)
       get_filename_component(_LIBCONFIGDIR "${_LIBCONFIGFILE}" PATH)
       get_filename_component(_LIBFILENAME  "${_LIBCONFIGFILE}" NAME)
 
-      string(REPLACE "CMakeLists3.Lib." "" _LIBFILENAME "${_LIBFILENAME}")
-      string(REPLACE ".txt"             "" _LIBFILENAME "${_LIBFILENAME}")
+      string(REPLACE "CMakeLists${_CMVER_}.Lib." "" _LIBFILENAME "${_LIBFILENAME}")
+      string(REPLACE ".txt"                      "" _LIBFILENAME "${_LIBFILENAME}")
 
       string(REGEX MATCH ${_JTPRE}Contrib*|${_JTPRE}Test* 
                      _${_JPPRE}IS_CONTRIBLIB ${_LIBFILENAME})
@@ -350,6 +350,7 @@ macro(${_JCPRE}SORT_TARGET_LIST)
   endif()
 
   set(${_JPPRE}SORTED_TARGET_LIST ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
+  set(PROJECT_SORTED_TARGET_LIST  ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
 
   message(STATUS "sorted targets :")
   message(STATUS "  ${${_JPPRE}SORTED_TARGET_LIST}")
@@ -366,7 +367,8 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
     COMPATIBILITY SameMajorVersion                                           )
 
   configure_package_config_file(
-    ${CMAKE_SOURCE_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
+#    ${CMAKE_SOURCE_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
+    ${ZhuJiaSourceDir}/ProjectConfig.cmake.in 
     ${${_JPPRE}TARGET_NAME}Config.cmake
 
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
@@ -383,3 +385,5 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
             dev                                                            )
 
 endmacro()
+
+set(ZhuJiaSourceDir ${CMAKE_CURRENT_LIST_DIR})

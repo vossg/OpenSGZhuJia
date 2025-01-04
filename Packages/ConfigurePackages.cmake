@@ -118,6 +118,23 @@ macro(${_JCPRE}SETUP_OPENGL)
 endmacro()
 
 ########################################
+# glm
+########################################
+
+macro(${_JCPRE}SETUP_GLM)
+
+  find_package(glm CONFIG)
+
+  if(glm_FOUND)
+    cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_GLM    1       )
+    cmake_language(CALL ${_JCPRE}SET ${_JPPRE}GLM_TARGETS glm::glm)
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with glm          : ${${_JPPRE}WITH_GLM}")
+endmacro()
+
+########################################
 # network uri
 ########################################
 
