@@ -35,8 +35,17 @@ endif()
 
 string(TOUPPER ${_JGSUF} _JGSUF_UC)
 
+string(TOUPPER ${CMAKE_PROJECT_NAME} ${_JPPRE}PROJECT_NAME_UC)
+string(TOLOWER ${CMAKE_PROJECT_NAME} ${_JPPRE}PROJECT_NAME_LC)
+set   (        ${_JPPRE}PROJECT_NAME ${CMAKE_PROJECT_NAME}   )
+
 message(STATUS "using cmake   prefix ${_JCPRE}")
 message(STATUS "using project prefix ${_JPPRE}")
 
 message(STATUS "using target  prefix ${_JTPRE}")
 message(STATUS "using gen     suffix ${_JGSUF}/${_JGSUF_UC}")
+
+message(STATUS "using project lc ${${_JPPRE}PROJECT_NAME_UC}/"
+                                "${${_JPPRE}PROJECT_NAME}"    )
+message(STATUS "using project uc ${${_JPPRE}PROJECT_NAME_LC}/"
+                                "${${_JPPRE}PROJECT_NAME}"    )
