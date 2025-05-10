@@ -31,7 +31,8 @@ foreach(_EXTERNAL ${${_JPPRE}EXTRA_EXTERNAL_MODULES})
 
     if(NOT EXISTS "${${_JPPRE}${_EXTERNAL}_SOURCE_DIR}/${_CMFILE}")
       message(SEND_ERROR "Cannot find ${_EXTERNAL} sources directory: "
-                         "${${_JPPRE}${_EXTERNAL}_SOURCE_DIR}")              
+                         "${${_JPPRE}${_EXTERNAL}_SOURCE_DIR}/"
+                         "${_CMFILE}"                                  )
     else()
       list(APPEND ${_JPPRE}EXTERNAL_CONFIGS "${_EXTERNAL}")
 
