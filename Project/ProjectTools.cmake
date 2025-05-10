@@ -368,7 +368,7 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
 
   configure_package_config_file(
 #    ${CMAKE_SOURCE_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
-    ${ZhuJiaSourceDir}/ProjectConfig.cmake.in 
+    ${ZhuJiaSourceDir}/Project/ProjectConfig.cmake.in 
     ${${_JPPRE}TARGET_NAME}Config.cmake
 
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
@@ -386,4 +386,4 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
 
 endmacro()
 
-set(ZhuJiaSourceDir ${CMAKE_CURRENT_LIST_DIR})
+set(ZhuJiaSourceDir ${CMAKE_CURRENT_LIST_DIR}/..)
