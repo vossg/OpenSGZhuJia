@@ -413,3 +413,70 @@ macro(${_JCPRE}SETUP_CATCH2)
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
               "with catch2       : ${${_JPPRE}WITH_CATCH2}")
 endmacro()
+
+########################################
+# glfw
+########################################
+
+macro(${_JCPRE}SETUP_GLFW)
+  if(NOT glfw3_FOUND)
+    find_package(glfw3 CONFIG)
+
+    if(glfw3_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_GLFW3    1   )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}GLFW3_TARGETS glfw)
+
+      if(WIN32)
+        fixupTargetConfigs(glfw)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with glfw3        : ${${_JPPRE}WITH_GLFW3}")
+endmacro()
+
+
+########################################
+# embree 4
+########################################
+
+macro(${_JCPRE}SETUP_EMBREE)
+  if(NOT Embree_FOUND)
+    find_package(Embree 4 CONFIG)
+
+    if(Embree_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_EMBREE    1     )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}EMBREE_TARGETS embree)
+
+      if(WIN32)
+        fixupTargetConfigs(embree)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with embree      : ${${_JPPRE}WITH_EMBREE}")
+endmacro()
+
+########################################
+# TBB
+########################################
+
+macro(${_JCPRE}SETUP_TBB)
+  if(NOT TBB_FOUND)
+    find_package(TBB CONFIG)
+
+    if(TBB_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_TBB    1       )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}TBB_TARGETS TBB::tbb)
+
+      if(WIN32)
+        fixupTargetConfigs(TBB::tbb)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with tbb        : ${${_JPPRE}WITH_TBB}")
+endmacro()
