@@ -71,7 +71,7 @@ function(fixupTargetConfigs _tgt)
 ENDFUNCTION()
 
 #############################################################################
-# import target mapping
+# record git versions
 #############################################################################
 
 macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
@@ -110,6 +110,54 @@ macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
   ENDIF()
   
 endmacro() # FIND_REVISION_GIT)
+
+
+macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
+
+  find_package(Git)
+
+  add_custom_target(${PNAME}CreateVersionFile 
+                    ALL 
+                    COMMENT  "${PName} create version files")
+
+  if(NOT WIN32)
+    add_custom_command(
+      TARGET ${PNAME}CreateVersionFile
+      COMMAND echo "################### ${PNAME} #################" >  ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo -n "head: "                                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD         >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo -n "headenv: "                                   >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo "$ENV{GIT_BRANCH}$ENV{GIT_BRANCH_SENLIN}"        >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo -n "hash: "                                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND ${GIT_EXECUTABLE} rev-parse HEAD                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo -n "date: "                                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND ${GIT_EXECUTABLE} show -s --format=%ai HEAD           >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo -n "ccount: "                                    >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD               >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      COMMAND echo "##############################################" >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+      WORKING_DIRECTORY ${DIRECTORY}
+      COMMENT "processing ${PNAME} version"
+      VERBATIM
+    )
+  else()
+    add_custom_command(
+      TARGET ${PNAME}CreateVersionFile
+      COMMAND ${ZhuJiaSourceDir}/Project/createVersionFile.bat ${GIT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt ${PNAME}
+      WORKING_DIRECTORY ${DIRECTORY}
+      COMMENT "processing ${PNAME} version"
+      VERBATIM
+    )
+  ENDIF()
+
+  install(FILES       ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
+          DESTINATION share/${PNAME}
+          PERMISSIONS OWNER_WRITE OWNER_READ
+                                  GROUP_READ
+                                  WORLD_READ)
+
+  MESSAGE(STATUS "foo : ${DIRECTORY} ${PNAME}  | ")
+
+endmacro()
 
 #############################################################################
 # passes
