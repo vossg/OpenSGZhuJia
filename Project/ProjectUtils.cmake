@@ -32,6 +32,44 @@ function(${_JCPRE}PRINT_DIRECTORY_VARS_CLEANED _DIR)
 endfunction() # JCPRE_PRINT_DIRECTORY_VARS
 
 #############################################################################
+# print various c++/c flags
+#############################################################################
+
+macro(${_JCPRE}PRINT_COMPILER_LINKER_FLAGS HEADER)
+
+  if(NOT "${HEADER}" STREQUAL "")
+    message(STATUS "${HEADER}")
+  endif()
+
+  message(STATUS "  CXX_DEBUG        ${CMAKE_CXX_FLAGS_DEBUG}")
+  message(STATUS "  C_DEBUG          ${CMAKE_C_FLAGS_DEBUG}")
+  message(STATUS "  SHL_DEBUG        ${CMAKE_SHARED_LINKER_FLAGS_DEBUG}")
+  message(STATUS "  EXL_DEBUG        ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
+
+  message(STATUS "  CXX_DEBUGOPT     ${CMAKE_CXX_FLAGS_DEBUGOPT}")
+  message(STATUS "  C_DEBUGOPT       ${CMAKE_C_FLAGS_DEBUGOPT}")
+  message(STATUS "  SHL_DEBUGOPT     ${CMAKE_SHARED_LINKER_FLAGS_DEBUGOPT}")
+  message(STATUS "  EXL_DEBUGOPT     ${CMAKE_EXE_LINKER_FLAGS_DEBUGOPT}")
+
+  message(STATUS "  CXX_RELEASE      ${CMAKE_CXX_FLAGS_RELEASE}")
+  message(STATUS "  C_RELEASE        ${CMAKE_C_FLAGS_RELEASE}")
+  message(STATUS "  SHL_RELEASE      ${CMAKE_SHARED_LINKER_FLAGS_RELEASE}")
+  message(STATUS "  EXL_RELEASE      ${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
+
+  message(STATUS "  CXX_RELEASENOOPT ${CMAKE_CXX_FLAGS_RELEASENOOPT}")
+  message(STATUS "  C_RELEASENOOPT   ${CMAKE_C_FLAGS_RELEASENOOPT}")
+  message(STATUS "  SHL_RELEASENOOPT ${CMAKE_SHARED_LINKER_FLAGS_RELEASENOOPT}")
+  message(STATUS "  EXL_RELEASENOOPT ${CMAKE_EXE_LINKER_FLAGS_RELEASENOOPT}")
+
+  message(STATUS "  CXX_FLAGS        ${CMAKE_CXX_FLAGS}")
+  message(STATUS "  C_FLAGS          ${CMAKE_C_FLAGS}")
+
+  message(STATUS "  CXX_STD_LIBS     ${CMAKE_CXX_STANDARD_LIBRARIES}")
+  message(STATUS "  C_STDD_LIBS      ${CMAKE_C_STANDARD_LIBRARIES}  ")
+
+endmacro()
+
+#############################################################################
 # print message depending on the setting of ${_JCPRE}VERBOSE_BUILD_MESSAGES
 #############################################################################
 
