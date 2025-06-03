@@ -143,8 +143,8 @@ macro(${_JCPRE}ADD_DIRECTORY _DIRNAME)
   set(_RESDIR                       )
   set(_PREFIXPROC ${${_JPPRE}PREFIX})
 
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_DIRNAME}")
-    set(_RESDIR "${CMAKE_SOURCE_DIR}/${_DIRNAME}")
+  if(EXISTS "${CMAKE_ROOT_DIR}/${_DIRNAME}")
+    set(_RESDIR "${CMAKE_ROOT_DIR}/${_DIRNAME}")
   elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_DIRNAME}")
     set(_RESDIR "${CMAKE_CURRENT_SOURCE_DIR}/${_DIRNAME}")
   else()
@@ -291,14 +291,14 @@ if(FALSE)
           FILE(RELATIVE_PATH THE_SOURCE_GROUP
                              ${CMAKE_CURRENT_SOURCE_DIR}/Source
                              ${CMAKE_CURRENT_SOURCE_DIR}/${DIRNAME})
-        ELSEIF(EXISTS "${CMAKE_SOURCE_DIR}/${DIRNAME}")
+        ELSEIF(EXISTS "${CMAKE_ROOT_DIR}/${DIRNAME}")
           FILE(RELATIVE_PATH THE_SOURCE_GROUP
-                             ${CMAKE_SOURCE_DIR}/Source
-                             ${CMAKE_SOURCE_DIR}/${DIRNAME})
+                             ${CMAKE_ROOT_DIR}/Source
+                             ${CMAKE_ROOT_DIR}/${DIRNAME})
         ELSE()
           FILE(RELATIVE_PATH THE_SOURCE_GROUP
-                             ${CMAKE_SOURCE_DIR}/Source
-                             ${CMAKE_SOURCE_DIR}/${DIRNAME})
+                             ${CMAKE_ROOT_DIR}/Source
+                             ${CMAKE_ROOT_DIR}/${DIRNAME})
         ENDIF()
       ELSE()
           FILE(RELATIVE_PATH THE_SOURCE_GROUP

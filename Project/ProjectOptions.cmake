@@ -23,6 +23,7 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_ABI6     ""    OFF)
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_C++17    ""    OFF)
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_C++20    ""    ON )
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_C++23    ""    OFF)
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}GCC_USE_ATOMICS ""    ON )
 

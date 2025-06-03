@@ -18,7 +18,9 @@ endif()
 # C++ standard
 ##############################################################################
 
-IF(${_JPPRE}ENABLE_C++20)
+IF(${_JPPRE}ENABLE_C++23)
+    SET(CMAKE_CXX_STANDARD 23)
+ELSEIF(${_JPPRE}ENABLE_C++20)
     SET(CMAKE_CXX_STANDARD 20)
 ELSEIF(${_JPPRE}ENABLE_C++17)
     SET(CMAKE_CXX_STANDARD 17)
@@ -32,7 +34,8 @@ MESSAGE(STATUS "===========================================================")
 MESSAGE(STATUS "===========================================================")
 
 MESSAGE(STATUS "-${${_JPPRE}ENABLE_C++11}-${${_JPPRE}ENABLE_C++14}-"
-               "${${_JPPRE}ENABLE_C++17}-${${_JPPRE}ENABLE_C++20} "
+               "${${_JPPRE}ENABLE_C++17}-${${_JPPRE}ENABLE_C++20}-"
+               "${${_JPPRE}ENABLE_C++23}"
                "-> ${CMAKE_CXX_STANDARD}")
 
 MESSAGE(STATUS "===========================================================")
