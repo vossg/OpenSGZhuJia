@@ -167,13 +167,13 @@ macro(${_JCPRE}COLLECT_LIBRARIES)
 
   # Find files describing libraries to build, but make sure base
   # and system are processed first
-  #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_BASE RELATIVE "${CMAKE_SOURCE_DIR}"
+  #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_BASE RELATIVE "${CMAKE_ROOT_DIR}"
   #     "Source/CMakeLists${_CMVER_}.Lib.OSGBase.txt")
 
-  #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_SYSTEM RELATIVE "${CMAKE_SOURCE_DIR}"
+  #file(GLOB_RECURSE OSG_LIBRARY_CONFIG_FILE_SYSTEM RELATIVE "${CMAKE_ROOT_DIR}"
   #     "Source/CMakeLists${_CMVER_}.Lib.OSGSystem.txt")
 
-  file(GLOB_RECURSE _LIB_CFG_FILES RELATIVE "${CMAKE_SOURCE_DIR}"
+  file(GLOB_RECURSE _LIB_CFG_FILES RELATIVE "${CMAKE_ROOT_DIR}"
      "Source/*CMakeLists${_CMVER_}.Lib.*.txt")
 
   #file(REMOVE_ITEM _OSG_LIBRARY_CONFIG_FILES ${OSG_LIBRARY_CONFIG_FILE_BASE})
@@ -213,8 +213,8 @@ endmacro()
 
 macro(${_JCPRE}RUN_PREPARE _PRJPREP)
 
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
-    include("${CMAKE_SOURCE_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
+  if(EXISTS "${CMAKE_ROOT_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
+    include("${CMAKE_ROOT_DIR}/${_PRJPREP}.Prepare${_CMVER_}.cmake")
   endif()
 
   foreach(_LIB_CFG ${${_JPPRE}LIBRARY_CONFIG_FILES})
@@ -298,8 +298,8 @@ macro(${_JCPRE}RUN_FINALIZE _PRJFIN)
     endif()
   endforeach()
 
-  if(EXISTS "${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
-    include("${CMAKE_SOURCE_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
+  if(EXISTS "${CMAKE_ROOT_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
+    include("${CMAKE_ROOT_DIR}/${_PRJFIN}.Finalize${_CMVER_}.cmake")
   endif()
 
 endmacro()
@@ -415,7 +415,7 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
     COMPATIBILITY SameMajorVersion                                           )
 
   configure_package_config_file(
-#    ${CMAKE_SOURCE_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
+#    ${CMAKE_ROOT_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
     ${ZhuJiaSourceDir}/Project/ProjectConfig.cmake.in 
     ${${_JPPRE}TARGET_NAME}Config.cmake
 
