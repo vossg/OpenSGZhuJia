@@ -131,3 +131,17 @@ macro(JIAN_RESTORE_SAVED_VAR VAR_NAME)
   unset(              __JIAN_SAVE_${VAR_NAME} )
 endmacro()
 
+#############################################################################
+# support lib _DIR var
+#############################################################################
+
+macro(${_JCPRE}CHECK_SUPPORTLIB_DIR LIBDIR RELPATH)
+  if(NOT ${LIBDIR})
+    if(EXTLIBSDIR AND EXISTS ${EXTLIBSDIR})
+      set(${LIBDIR} "${EXTLIBSDIR}/${RELPATH}"    CACHE INTERNAL "")
+    elseif(DEFINED ENV{EXTLIBSDIR} AND EXISTS $ENV{EXTLIBSDIR})
+      set(${LIBDIR} "$ENV{EXTLIBSDIR}/${RELPATH}" CACHE INTERNAL "")
+    endif()
+  endif()
+endmacro()
+
