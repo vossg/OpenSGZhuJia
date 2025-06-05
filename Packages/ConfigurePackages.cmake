@@ -3,6 +3,20 @@
 # boost
 ########################################
 
+macro(fixupBoostDllLocation _COMPONENT)
+
+  get_target_property(_DLL_LOC_OPT ${_COMPONENT} IMPORTED_LOCATION_RELEASE)
+  get_target_property(_DLL_LOC_DBG ${_COMPONENT} IMPORTED_LOCATION_DEBUG)
+
+  string(REPLACE "/lib/" "/bin/" _DLL_LOC_OPT_NEW ${_DLL_LOC_OPT})
+  string(REPLACE "/lib/" "/bin/" _DLL_LOC_DBG_NEW ${_DLL_LOC_DBG})
+
+  set_target_properties(${_COMPONENT} PROPERTIES
+                        IMPORTED_LOCATION_RELEASE "${_DLL_LOC_OPT_NEW}"
+                        IMPORTED_LOCATION_DEBUG   "${_DLL_LOC_DBG_NEW}")
+
+endmacro()
+
 macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
 
   set(Boost_USE_MULTITHREADED    ON)
@@ -47,6 +61,19 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
   message(STATUS "  using boost libs: "
                  "${${_COMPONENTS}} ${${_INDIRECT_COMPONENTS}}")
 
+  if(WIN32)
+    foreach(_COMPONENT ${${_COMPONENTS}})
+      if(boost_${_COMPONENT}_FOUND)
+        fixupBoostDllLocation(Boost::${_COMPONENT})
+      endif()
+    endforeach()
+
+    foreach(_COMPONENT ${${_INDIRECT_COMPONENTS}})
+      if(boost_${_COMPONENT}_FOUND)
+        fixupTargetConfigs(Boost::${_COMPONENT})
+      endif()
+    endforeach()
+  endif()
 
   foreach(_COMPONENT ${${_COMPONENTS}})
     if(boost_${_COMPONENT}_FOUND)
