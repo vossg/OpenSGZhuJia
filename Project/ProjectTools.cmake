@@ -27,9 +27,11 @@ macro(${_JCPRE}COMMON_TARGETS)
   endif()
 
   add_custom_target(                ${_JTPRE}AllLibs       )
+  add_custom_target(                ${_JTPRE}AllCoreLibs   )
   add_custom_target(                ${_JTPRE}AllContribLibs)
 
   add_dependencies(${_JTPRE}All     ${_JTPRE}AllLibs       )
+  add_dependencies(${_JTPRE}AllLibs ${_JTPRE}AllCoreLibs   )
   add_dependencies(${_JTPRE}AllLibs ${_JTPRE}AllContribLibs)
 
 endmacro()
@@ -141,7 +143,7 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
     )
   else()
     add_custom_command(
-      TARGET ${PNAME}CreateVersionFile
+      TARGET ${PNAME}CreateVersionFile POST_BUILD
       COMMAND ${ZhuJiaSourceDir}/Project/createVersionFile.bat ${GIT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt ${PNAME}
       WORKING_DIRECTORY ${DIRECTORY}
       COMMENT "processing ${PNAME} version"

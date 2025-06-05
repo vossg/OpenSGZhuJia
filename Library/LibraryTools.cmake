@@ -565,6 +565,7 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   set(${_JPPRE}TARGET_LIST ${${_JPPRE}TARGET_LIST};${${_JPPRE}TARGET_NAME} 
         CACHE INTERNAL "")
 
+  add_dependencies(${${_JPPRE}MAIN_LIB_TARGET} ${${_JPPRE}TARGET_NAME})
 
   foreach(_PUB_INCDIR ${${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR})
     target_include_directories(
@@ -770,7 +771,16 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME}   )
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
 
-      catch_discover_tests(${_EXE} DISCOVERY_MODE)
+      if(WIN32)
+        set(_DLL_PATH "DL_PATHS" "$<TARGET_RUNTIME_DLL_DIRS:${_EXE}>")
+      endif()
+
+      catch_discover_tests(${_EXE} DISCOVERY_MODE PRE_TEST
+                                   ${_DLL_PATH}           )
+
+      if(WIN32)
+        unset(_DLL_PATH)
+      endif()
     endforeach()
   endif()
     
@@ -791,7 +801,17 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
 
       if(NOT SENLIN_EXCLUDE_BENCH_FROM_TEST)
-        catch_discover_tests(${_EXE} TEST_SPEC "[!benchmark]")
+        if(WIN32)
+          set(_DLL_PATH "DL_PATHS" "$<TARGET_RUNTIME_DLL_DIRS:${_EXE}>")
+        endif()
+
+        catch_discover_tests(${_EXE} TEST_SPEC "[!benchmark]"
+                                     DISCOVERY_MODE PRE_TEST
+                                     ${_DLL_PATH}           )
+
+        if(WIN32)
+          unset(_DLL_PATH)
+        endif()
       endif()
     endforeach()
   endif()
