@@ -1,3 +1,5 @@
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/@TARGET_NAME@Targets.cmake")
+@_CFG_COMPILER_CFG@
+
+include("${CMAKE_CURRENT_LIST_DIR}/@_CFG_TARGET_NAME@Targets.cmake")
