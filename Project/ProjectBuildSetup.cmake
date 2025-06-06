@@ -44,10 +44,20 @@ MESSAGE(STATUS "===========================================================")
 set(CXX_STANDARD_REQUIRED TRUE)
 
 ##############################################################################
+# config export
+##############################################################################
+
+set(${_JTPRE}CompilerConfigString "")
+
+##############################################################################
 # compiler
 ##############################################################################
 
 add_library(${_JTPRE}::compiler_settings INTERFACE IMPORTED)
+
+string(APPEND ${_JTPRE}CompilerConfigString
+       "if(NOT TARGET ${_JTPRE}::compiler_settings)\n\n"
+       "  add_library(${_JTPRE}::compiler_settings INTERFACE IMPORTED)\n\n")
 
 add_library(${_JTPRE}::sse2   INTERFACE IMPORTED)
 add_library(${_JTPRE}::sse4.1 INTERFACE IMPORTED)
@@ -93,6 +103,11 @@ if(CMAKE_COMPILER_IS_GNUCC)
   target_compile_options    (
     ${_JTPRE}::compiler_settings INTERFACE
       $<$<OR:$<CONFIG:Release>,$<CONFIG:ReleaseGV>>:-Wno-strict-aliasing>)
+
+  string(APPEND ${_JTPRE}CompilerConfigString
+         "  target_compile_definitions(\n"
+         "    ${_JTPRE}::compiler_settings INTERFACE\n"
+         "      __STDC_FORMAT_MACROS)\n"               )
 
 endif()
 
@@ -282,6 +297,11 @@ if(UNIX)
   target_compile_definitions(
     ${_JTPRE}::compiler_settings INTERFACE
       $<$<OR:$<CONFIG:Debug>,$<CONFIG:DebugGV>>:_DEBUG>)
+
+  string(APPEND ${_JTPRE}CompilerConfigString
+         "  target_compile_definitions(\n"
+         "    ${_JTPRE}::compiler_settings INTERFACE\n"
+         "      $<$<OR:$<CONFIG:Debug>,$<CONFIG:DebugGV>>:_DEBUG>)\n")
 endif()
 
 if(MSVC)
@@ -294,10 +314,10 @@ target_compile_definitions(
   ${_JTPRE}::compiler_settings INTERFACE
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:DebugGV>>:${_JPPRE}DEBUG>)
 
-#target_compile_definitions(
-#  ${_JTPRE}::compiler_settings INTERFACE
-#    $<$<OR:$<CONFIG:Release>,$<CONFIG:ReleaseGV>>:${_JPPRE}DEBUGX>)
-
+string(APPEND ${_JTPRE}CompilerConfigString
+         "  target_compile_definitions(\n"
+         "    ${_JTPRE}::compiler_settings INTERFACE\n"
+         "      $<$<OR:$<CONFIG:Debug>,$<CONFIG:DebugGV>>:${_JPPRE}DEBUG>)\n")
 
 
 if(${_JPPRE}ENABLE_SSE4)
@@ -333,6 +353,8 @@ if(${_JPPRE}ENABLE_ABI6)
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::abi6         )
 endif()
 
+string(APPEND ${_JTPRE}CompilerConfigString
+         "\nendif()\n")
 
 
 ##############################################################################

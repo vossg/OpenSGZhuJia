@@ -1,0 +1,21 @@
+
+macro(@_JCPRE@SETUP_FIND_BOOST)
+
+  set(Boost_USE_MULTITHREADED    ON)
+  set(Boost_NO_WARN_NEW_VERSIONS ON)
+
+  if(NOT Boost_USE_STATIC_LIBS)
+    set(Boost_USE_STATIC_LIBS OFF CACHE INTERNAL "")
+  endif()
+
+  if(Boost_DIR AND NOT BOOST_ROOT)
+    cmake_path(SET BOOST_ROOT NORMALIZE ${Boost_DIR}/../../..)
+  endif()
+
+  unset(Boost_USE_DEBUG_LIBS    )
+  unset(Boost_USE_RELEASE_LIBS  )
+  unset(Boost_USE_DEBUG_RUNTIME )
+  unset(Boost_USE_STATIC_RUNTIME)
+
+endmacro()
+

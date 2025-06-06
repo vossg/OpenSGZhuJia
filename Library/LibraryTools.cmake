@@ -650,10 +650,16 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
     VERSION ${${_CPN_UC}_VERSION_STRING}
     COMPATIBILITY SameMajorVersion                                        )
 
+  set(_CFG_TARGET_NAME ${${_JPPRE}TARGET_NAME})
+  set(_CFG_COMPILER_CFG ${${_JTPRE}CompilerConfigString})
+
   configure_package_config_file(
     ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/LibConfig.cmake.in 
     ${${_JPPRE}TARGET_NAME}Config.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
+
+  unset(_CFG_TARGET_NAME )
+  unset(_CFG_COMPILER_CFG)
 
 
   install(

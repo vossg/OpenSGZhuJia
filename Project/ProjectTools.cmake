@@ -399,6 +399,8 @@ macro(${_JCPRE}SORT_TARGET_LIST)
     message(SEND_ERROR "fatal could not sort target list within 50 steps")
   endif()
 
+  list(REVERSE _TARGETLIST_RESULT)
+
   set(${_JPPRE}SORTED_TARGET_LIST ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
   set(PROJECT_SORTED_TARGET_LIST  ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
 
@@ -410,11 +412,24 @@ endmacro()
 
 macro(${_JCPRE}EXPORT_MAIN_PROJECT)
 
+  configure_file("${ZhuJiaSourceDir}/Packages/PackageHelper.cmake.in"
+                 "${CMAKE_BINARY_DIR}/PackageHelper.cmake"
+                 @ONLY                                              )
+
+  install(FILES
+            ${CMAKE_BINARY_DIR}/PackageHelper.cmake
+
+          DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME}/
+
+          COMPONENT
+            dev                                                     )
+
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}ConfigVersion.cmake
 
     VERSION       ${${${_JPPRE}TARGET_NAME_UC}_VERSION_STRING}
-    COMPATIBILITY SameMajorVersion                                           )
+    COMPATIBILITY SameMajorVersion                                        )
 
   configure_package_config_file(
 #    ${CMAKE_ROOT_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 

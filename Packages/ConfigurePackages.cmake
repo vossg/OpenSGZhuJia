@@ -51,10 +51,19 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
                    PROPERTY INTERFACE_COMPILE_DEFINITIONS 
                      "BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1")
 
-    set(        OSG_BOOST_TARGETS Boost::dynamic_linking    )
-    list(APPEND OSG_BOOST_TARGETS Boost::disable_autolinking)
-    list(APPEND OSG_BOOST_TARGETS Boost::custom_definitions)
-    list(APPEND OSG_BOOST_TARGETS Boost::headers            )
+    set(        ${_JPPRE}BOOST_TARGETS Boost::dynamic_linking    )
+    list(APPEND ${_JPPRE}BOOST_TARGETS Boost::disable_autolinking)
+    list(APPEND ${_JPPRE}BOOST_TARGETS Boost::custom_definitions)
+    list(APPEND ${_JPPRE}BOOST_TARGETS Boost::headers            )
+
+    string(APPEND ${_JTPRE}CompilerConfigString
+             "\nif(NOT TARGET Boost::custom_definitions)\n"
+             "  add_library(Boost::custom_definitions INTERFACE IMPORTED)\n"
+             "  set_property(TARGET Boost::custom_definitions\n"
+             "                 PROPERTY INTERFACE_COMPILE_DEFINITIONS\n"
+             "                   \"BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE"
+                                                                      "=1\")\n"
+             "endif()\n")
 
   endif() # Boost_FOUND
 
