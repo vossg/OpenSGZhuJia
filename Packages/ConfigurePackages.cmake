@@ -224,6 +224,10 @@ macro(${_JCPRE}SETUP_NETWORK_URI)
 
     if(EXISTS "${NetworkURI_DIR}/include")
       set(NetworkURI_FOUND TRUE)
+    else()
+      message(WARNING "network uri not found, "
+                      "NetworkURI_DIR (${NetworkURI_DIR}) either wrong or "
+                      "not present"                                        )
     endif()
   endif()
 
@@ -312,6 +316,38 @@ macro(${_JCPRE}SETUP_RAPIDJSON)
 endmacro()
 
 ########################################
+# json spirit
+########################################
+
+macro(${_JCPRE}SETUP_JSONSPIRIT)
+  if(NOT jsonSpirit_FOUND)
+    add_library(json_spirit INTERFACE IMPORTED)
+    set_property(TARGET json_spirit PROPERTY
+                 INTERFACE_INCLUDE_DIRECTORIES ${jsonSpirit_DIR}/include)
+
+    if(EXISTS "${jsonSpirit_DIR}/include"                                 AND
+       EXISTS "${jsonSpirit_DIR}/include/json_spirit/json_spirit_value.h"    )
+      set(jsonSpirit_FOUND TRUE)
+    else()
+      message(WARNING "json spirit not found, "
+                      "jsonSpirit_DIR (${jsonSpirit_DIR}) either wrong or "
+                      "not present"                                        )
+    endif()
+  endif()
+
+  if(jsonSpirit_FOUND)
+    cmake_language(CALL ${_JCPRE}SET 
+                     ${_JPPRE}WITH_JSONSPIRIT    1          )
+    cmake_language(CALL ${_JCPRE}SET 
+                     ${_JPPRE}JSONSPIRIT_TARGETS json_spirit)
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with json spirit  : ${${_JPPRE}WITH_JSONSPIRIT}")
+endmacro()
+
+
+########################################
 # openssl
 ########################################
 
@@ -347,6 +383,10 @@ macro(${_JCPRE}SETUP_SIMPLEWEBSERVER)
 
     if(EXISTS "${SimpleWebServer_DIR}/include")
       set(SimpleWebServer_FOUND TRUE)
+    else()
+      message(WARNING "SimpleWebServer not found, "
+                      "SimpleWebServer_DIR (${SimpleWebServer_DIR}) "
+                      "either wrong or not present"                  )
     endif()
   endif()
 
@@ -374,6 +414,10 @@ macro(${_JCPRE}SETUP_SIMPLEWEBSOCKETSERVER)
 
     if(EXISTS "${SimpleWSocketServer_DIR}/include")
       set(SimpleWSocketServer_FOUND TRUE)
+    else()
+      message(WARNING "SimpleWSocketServer not found, "
+                      "SimpleWSocketServer_DIR (${SimpleWSocketServer_DIR}) "
+                      "either wrong or not present"                         )
     endif()
   endif()
 
@@ -526,3 +570,94 @@ macro(${_JCPRE}SETUP_EMBREE)
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
               "with embree       : ${${_JPPRE}WITH_EMBREE}")
 endmacro()
+
+########################################
+# zlib
+########################################
+
+macro(${_JCPRE}SETUP_ZLIB)
+  if(NOT ZLIB_FOUND)
+    find_package(ZLIB) # CONFIG)
+
+    if(ZLIB_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_ZLIB    1         )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}ZLIB_TARGETS ZLIB::ZLIB)
+
+      if(WIN32)
+        fixupTargetConfigs(ZLIB::zlib)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with zlib         : ${${_JPPRE}WITH_ZLIB}")
+endmacro()
+
+########################################
+# png
+########################################
+
+macro(${_JCPRE}SETUP_PNG)
+  if(NOT PNG_FOUND)
+    find_package(PNG) # CONFIG)
+
+    if(PNG_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_PNG    1       )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}PNG_TARGETS PNG::PNG)
+
+      if(WIN32)
+        fixupTargetConfigs(PNG::PNG)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with PNG          : ${${_JPPRE}WITH_PNG}")
+endmacro()
+
+########################################
+# fast dxt
+########################################
+
+macro(${_JCPRE}SETUP_FASTDXT)
+  if(NOT FastDXT_FOUND)
+    find_package(FastDXT CONFIG)
+
+    if(FastDXT_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                            ${_JPPRE}WITH_FASTDXT    1               )
+      cmake_language(CALL ${_JCPRE}SET 
+                            ${_JPPRE}FASTDXT_TARGETS FastDXT::fastdxt)
+
+      if(WIN32)
+        fixupTargetConfigs(FastDXT::fastdxt)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with fast dxt     : ${${_JPPRE}WITH_FASTDXT}")
+endmacro()
+
+########################################
+# squish
+########################################
+
+macro(${_JCPRE}SETUP_SQUISH)
+  if(NOT Squish_FOUND)
+    find_package(Squish CONFIG)
+
+    if(Squish_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_SQUISH    1             )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}SQUISH_TARGETS Squish::squish)
+
+      if(WIN32)
+        fixupTargetConfigs(Squish::squish)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with squish       : ${${_JPPRE}WITH_SQUISH}")
+endmacro()
+
