@@ -109,6 +109,21 @@ if(CMAKE_COMPILER_IS_GNUCC)
          "    ${_JTPRE}::compiler_settings INTERFACE\n"
          "      __STDC_FORMAT_MACROS)\n"               )
 
+
+  if(NOT __${_JTPRE}__CMFLAGS_SETUP__)
+    message(STATUS "----- basic cmake compiler flags setup -----")
+
+    set(CMAKE_CXX_FLAGS_DEBUGGV "${CMAKE_CXX_FLAGS_DEBUG}"
+          CACHE STRING "Flags used by the C++ compiler during debug builds."
+          FORCE)
+
+    set(CMAKE_C_FLAGS_DEBUGGV "${CMAKE_C_FLAGS_DEBUG}"
+          CACHE STRING "Flags used by the C++ compiler during debug builds."
+          FORCE)
+
+    set(__${_JTPRE}__CMFLAGS_SETUP__ TRUE CACHE INTERNAL "" FORCE)
+  endif()
+
 endif()
 
 ##############################################################################
