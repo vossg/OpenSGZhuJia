@@ -152,6 +152,10 @@ if(MSVC)
   set(CMAKE_MSVC_RUNTIME_LIBRARY
         "${CMAKE_MSVC_RUNTIME_LIBRARY}$<$<CONFIG:ReleaseNoOpt>:DLL>" )
 
+  if(NOT PROJECT_IS_TOP_LEVEL)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "${CMAKE_MSVC_RUNTIME_LIBRARY}"
+          PARENT_SCOPE                                                 )
+  endif()
 
   if(NOT __${_JTPRE}__CMFLAGS_SETUP__)
     message(STATUS "----- basic cmake compiler flags setup -----")
