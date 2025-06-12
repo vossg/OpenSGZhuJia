@@ -18,16 +18,16 @@ endif()
 # C++ standard
 ##############################################################################
 
-IF(${_JPPRE}ENABLE_C++23)
-    SET(CMAKE_CXX_STANDARD 23)
-ELSEIF(${_JPPRE}ENABLE_C++20)
-    SET(CMAKE_CXX_STANDARD 20)
-ELSEIF(${_JPPRE}ENABLE_C++17)
-    SET(CMAKE_CXX_STANDARD 17)
-ELSEIF(${_JPPRE}ENABLE_C++14)
-    SET(CMAKE_CXX_STANDARD 14)
-ELSE()
-    SET(CMAKE_CXX_STANDARD 11)
+if(${_JPPRE}ENABLE_C++23)
+    set(CMAKE_CXX_STANDARD 23)
+elseif(${_JPPRE}ENABLE_C++20)
+    set(CMAKE_CXX_STANDARD 20)
+elseif(${_JPPRE}ENABLE_C++17)
+    set(CMAKE_CXX_STANDARD 17)
+elseif(${_JPPRE}ENABLE_C++14)
+    set(CMAKE_CXX_STANDARD 14)
+else()
+    set(CMAKE_CXX_STANDARD 11)
 ENDIF()
 
 MESSAGE(STATUS "===========================================================")
@@ -42,6 +42,14 @@ MESSAGE(STATUS "===========================================================")
 MESSAGE(STATUS "===========================================================")
 
 set(CXX_STANDARD_REQUIRED TRUE)
+
+##############################################################################
+# Visibility
+##############################################################################
+
+set(CMAKE_CXX_VISIBILITY_PRESET     hidden CACHE INTERNAL "")
+set(CMAKE_C_VISIBILITY_PRESET       hidden CACHE INTERNAL "")
+set(CMAKE_VISIBILITY_INLINES_HIDDEN true   CACHE INTERNAL "")
 
 ##############################################################################
 # config export
