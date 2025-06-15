@@ -52,3 +52,11 @@ set(${_JPPRE}DEPENDENCY_STATES "")
 set(FBSExtractSourceDir ${CMAKE_CURRENT_LIST_DIR}/../FBSExtract)
 
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+
+if(NOT WIN32)
+  string(ASCII 27 __Esc)
+  set(ColorReset "${__Esc}[m")
+  set(ColorBold  "${__Esc}[1m")
+  set(ColorRed   "${__Esc}[31m")
+endif()
+ 
