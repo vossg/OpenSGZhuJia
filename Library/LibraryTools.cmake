@@ -732,17 +732,17 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
 
   foreach(_TST_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_TEST_PRJ_TARGETS})
     if(NOT TARGET ${_TST_PRJ_TARGET})
-      message(NOTICE "  test dependency ${_TST_PRJ_TARGET} missing, "
-                     "skipping tests")
+      message(WARNING "  test dependency ${_TST_PRJ_TARGET} missing, "
+                      "skipping tests"                               )
       set(_TST_DEPENDENCIES_VALID FALSE)
     endif()
   endforeach()
 
   if(_TST_DEPENDENCIES_VALID)
     foreach(_TST_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_TEST_DEP_TARGETS})
-      if(NOT TARGET ${_TST_PRJ_TARGET})
-        message(NOTICE "  test dependency ${_TST_DEP_TARGET} missing, "
-                       "skipping tests")
+      if(NOT TARGET ${${_TST_DEP_TARGET}})
+        message(WARNING "  test dependency ${_TST_DEP_TARGET} "
+                        "missing, skipping tests"             )
         set(_TST_DEPENDENCIES_VALID FALSE)
       endif()
     endforeach()
@@ -851,7 +851,7 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
   foreach(_APP_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_APP_PRJ_TARGETS})
     if(NOT TARGET ${_APP_PRJ_TARGET})
       message(NOTICE "  app dependency ${_APP_PRJ_TARGET} missing, "
-                     "skipping apps")
+                     "skipping apps"                               )
       set(_APP_DEPENDENCIES_VALID FALSE)
     endif()
   endforeach()
@@ -860,7 +860,7 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
     foreach(_APP_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_APP_DEP_TARGETS})
       if(NOT TARGET ${${_APP_DEP_TARGET}})
         message(NOTICE "  app dependency ${_APP_DEP_TARGET} missing, "
-                       "skipping apps")
+                       "skipping apps"                               )
         set(_APP_DEPENDENCIES_VALID FALSE)
       endif()
     endforeach()
@@ -905,6 +905,15 @@ function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   if(${_JPPRE}CMAKE_PASS STREQUAL "main")
     cmake_language(CALL ${_JCPRE}DO_SETUP_LIBRARY_TARGET ${_TARGET_COMPILE_TAG})
   elseif(${_JPPRE}CMAKE_PASS STREQUAL "secondary")
+
+    message(STATUS "  dependencies")
+    foreach(_PUB_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS})
+      message(STATUS "    ${_PUB_PRJ_TARGET}")
+      if(NOT TARGET ${_PUB_PRJ_TARGET})
+        message(FATAL_ERROR "   dependency missing")
+      endif()
+    endforeach()
+
     cmake_language(CALL ${_JCPRE}DO_SETUP_APP_TARGETS)
     cmake_language(CALL ${_JCPRE}DO_SETUP_TEST_TARGETS)
   else()
@@ -923,12 +932,12 @@ function(${_JCPRE}SETUP_CONFIGURED_H _SRC_CFGFILE _TARGET_CFGFILE)
                      "${_SRC_CFGFILE}"
                      "${_TARGET_CFGFILE}.tmp.cmake")
 
-  foreach(_ADD_CONFIGURE_LINE ${${_JPPRE}ADDITIONAL_CONFIGURE_LINES})
+  foreach(_ADD_CONFIGURE_LINE ${${_JCPRE}ADDITIONAL_CONFIGURE_LINES})
     file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
   endforeach()
 
   file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" 
-              "\n#endif // _${_JPPRE}CONFIGURED_H_\n")
+              "\n#endif // _${_JCPRE}CONFIGURED_H_\n")
 
   configure_file("${_TARGET_CFGFILE}.tmp.cmake"
                  "${_TARGET_CFGFILE}.tmp")
@@ -947,12 +956,12 @@ function(${_JCPRE}SETUP_CONFIGURED_VERSION_H _SRC_CFGFILE _TARGET_CFGFILE)
                      "${_SRC_CFGFILE}"
                      "${_TARGET_CFGFILE}.tmp.cmake")
 
-  foreach(_ADD_CONFIGURE_LINE ${${_JPPRE}ADDITIONAL_CONFIGURE_VER_LINES})
+  foreach(_ADD_CONFIGURE_LINE ${${_JCPRE}ADDITIONAL_CONFIGURE_VER_LINES})
     file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
   endforeach()
 
   file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" 
-              "\n#endif // _${_JPPRE}CONFIGUREDVERSIONS_H_\n")
+              "\n#endif // _${_JCPRE}CONFIGUREDVERSIONS_H_\n")
 
   configure_file("${_TARGET_CFGFILE}.tmp.cmake"
                  "${_TARGET_CFGFILE}.tmp")
