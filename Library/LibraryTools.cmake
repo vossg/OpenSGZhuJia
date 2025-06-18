@@ -41,6 +41,10 @@ macro(${_JCPRE}POP_PREFIX)
   list(POP_BACK  _PREFIX_STACK ${_JCPRE}PREFIX)
 endmacro()
 
+macro(${_JCPRE}SET_NO_LIB)
+  set(${${_JPPRE}TARGET_NAME}_NO_LIB TRUE CACHE INTERNAL "")
+endmacro()
+
 macro(${_JCPRE}RESET_LIBRARY_PROJECT)
 
   set(${${_JPPRE}TARGET_NAME}_BASE_DIR            "" CACHE INTERNAL "")
@@ -761,7 +765,9 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
         add_dependencies(${_JTPRE}AllTests ${_EXE})
       endif()
 
-      target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
+        target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      endif()
 
       foreach(_TST_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_TEST_PRJ_TARGETS})
         target_link_libraries(${_EXE} PRIVATE ${_TST_PRJ_TARGET})
@@ -787,7 +793,10 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
         add_dependencies(${_JTPRE}AllUTests ${_EXE})
       endif()
 
-      target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME}   )
+      if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
+        target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      endif()
+
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
 
       if(WIN32)
@@ -816,7 +825,10 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
         add_dependencies(${_JTPRE}AllUBench ${_EXE})
       endif()
 
-      target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME}   )
+      if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
+        target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      endif()
+
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
 
       if(NOT SENLIN_EXCLUDE_BENCH_FROM_TEST)
@@ -880,7 +892,9 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
         add_dependencies(${_JTPRE}AllApps ${_APP_EXE})
       endif()
 
-      target_link_libraries(${_APP_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
+        target_link_libraries(${_APP_EXE} PRIVATE ${${_JPPRE}TARGET_NAME})
+      endif()
 
       foreach(_APP_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_APP_PRJ_TARGETS})
         target_link_libraries(${_APP_EXE} PRIVATE ${_APP_PRJ_TARGET})
@@ -903,7 +917,10 @@ endfunction()
 
 function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   if(${_JPPRE}CMAKE_PASS STREQUAL "main")
-    cmake_language(CALL ${_JCPRE}DO_SETUP_LIBRARY_TARGET ${_TARGET_COMPILE_TAG})
+    if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
+      cmake_language(CALL ${_JCPRE}DO_SETUP_LIBRARY_TARGET 
+                            ${_TARGET_COMPILE_TAG}        )
+    endif()
   elseif(${_JPPRE}CMAKE_PASS STREQUAL "secondary")
 
     message(STATUS "  dependencies")

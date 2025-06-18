@@ -127,7 +127,7 @@ macro(${_JCPRE}SETUP_OPENGL)
     endif()
 
     if(OpenGL_OpenGL_FOUND)
-      set(${_JPPRE}GL_TARGETS OpenGL::GL)
+      set(${_JPPRE}GL_TARGETS  OpenGL::GL)
     endif()
     if(OpenGL_GLX_FOUND)
       set(${_JPPRE}GLX_TARGETS OpenGL::GLX)
@@ -257,6 +257,9 @@ macro(${_JCPRE}SETUP_GLEW)
 
       if(WIN32)
         fixupTargetConfigs(GLEW::glew)
+      endif()
+      if(LINUX)
+        target_link_libraries(GLEW::glew INTERFACE OpenGL::GLX)
       endif()
     endif()
   endif()
@@ -535,7 +538,7 @@ macro(${_JCPRE}SETUP_TBB)
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
-              "with tbb        : ${${_JPPRE}WITH_TBB}")
+              "with tbb          : ${${_JPPRE}WITH_TBB}")
 endmacro()
 
 ########################################
