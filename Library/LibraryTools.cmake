@@ -931,6 +931,9 @@ function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
       endif()
     endforeach()
 
+    set(${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS 
+            ${${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS} CACHE INTERNAL "")
+
     cmake_language(CALL ${_JCPRE}DO_SETUP_APP_TARGETS)
     cmake_language(CALL ${_JCPRE}DO_SETUP_TEST_TARGETS)
   else()
