@@ -133,9 +133,10 @@ macro(${_JCPRE}RESET_LIBRARY_PROJECT)
 endmacro()
 
 
-macro(${_JCPRE}ADD_DIRECTORY _DIRNAME)
+macro(${_JCPRE}DO_ADD_DIRECTORY _DIRNAME _PRIVATE)
 
-  cmake_language(CALL ${_JCPRE}MSG "  Adding directory: ${_DIRNAME}")
+  cmake_language(CALL ${_JCPRE}MSG 
+                      "  Adding directory: ${_DIRNAME} ${_PRIVATE}")
 
   set(_ADD_SRC_LOOKUP         )
   set(_ADD_HDR_LOOKUP         )
@@ -346,13 +347,16 @@ if(FALSE)
 endif()
 
   list(APPEND ${${_JPPRE}TARGET_NAME}_SRC           ${_LOCAL_SRC}         )
-  list(APPEND ${${_JPPRE}TARGET_NAME}_INS           ${_LOCAL_INS}         )
 
-  list(APPEND ${${_JPPRE}TARGET_NAME}_HDR           ${_LOCAL_HDR}         )
-  list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_HDR    ${_LOCAL_HDR}         )
+  if(NOT ${_PRIVATE})
+    list(APPEND ${${_JPPRE}TARGET_NAME}_INS           ${_LOCAL_INS}         )
 
-  list(APPEND ${${_JPPRE}TARGET_NAME}_INL           ${_LOCAL_INL}         )
-  list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_INL    ${_LOCAL_INL}         )
+    list(APPEND ${${_JPPRE}TARGET_NAME}_HDR           ${_LOCAL_HDR}         )
+    list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_HDR    ${_LOCAL_HDR}         )
+
+    list(APPEND ${${_JPPRE}TARGET_NAME}_INL           ${_LOCAL_INL}         )
+    list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_INL    ${_LOCAL_INL}         )
+  endif()
 
   list(APPEND ${${_JPPRE}TARGET_NAME}_LL            ${_LOCAL_LL}          )
   list(APPEND ${${_JPPRE}TARGET_NAME}_YY            ${_LOCAL_YY}          )
@@ -367,7 +371,7 @@ endif()
   list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR ${_RESDIR}            )
 
 
-  if(FALSE)
+  if(TRUE)
     cmake_language(CALL ${_JCPRE}MSG 
                      "    got src      : ${${${_JPPRE}TARGET_NAME}_SRC}"     )
     cmake_language(CALL ${_JCPRE}MSG 
@@ -393,6 +397,14 @@ endif()
 
   cmake_language(CALL ${_JCPRE}MSG "    ")
 
+endmacro()
+
+macro(${_JCPRE}ADD_DIRECTORY _DIRNAME)
+  cmake_language(CALL ${_JCPRE}DO_ADD_DIRECTORY ${_DIRNAME} FALSE)
+endmacro()
+
+macro(${_JCPRE}ADD_PRIVATE_DIRECTORY _DIRNAME)
+  cmake_language(CALL ${_JCPRE}DO_ADD_DIRECTORY ${_DIRNAME} TRUE)
 endmacro()
 
 ###############
