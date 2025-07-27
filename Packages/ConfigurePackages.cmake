@@ -355,8 +355,12 @@ endmacro()
 ########################################
 
 macro(${_JCPRE}SETUP_OPENSSL)
-  if(NOT OPENSSL_FOUND)
-    find_package(OpenSSL)
+  if(NOT OPENSSL_FOUND)   
+    if(WIN32)
+      find_package(OpenSSL CONFIG)
+    else()
+      find_package(OpenSSL)
+    endif()
 
     if(OPENSSL_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
