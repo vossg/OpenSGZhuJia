@@ -591,7 +591,7 @@ macro(${_JCPRE}SETUP_ZLIB)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}ZLIB_TARGETS ZLIB::ZLIB)
 
       if(WIN32)
-        fixupTargetConfigs(ZLIB::zlib)
+        fixupTargetConfigs(ZLIB::ZLIB)
       endif()
     endif()
   endif()
