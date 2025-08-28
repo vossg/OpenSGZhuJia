@@ -576,6 +576,8 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
 
 
   add_library(${${_JPPRE}TARGET_NAME} SHARED ${${${_JPPRE}TARGET_NAME}_SRC} 
+                                             ${${${_JPPRE}TARGET_NAME}_INL} 
+                                             ${${${_JPPRE}TARGET_NAME}_INS} 
                                              ${${${_JPPRE}TARGET_NAME}_HDR})
 
   add_library(${${_JPPRE}PROJECT_TARGET_NAME}::${${_JPPRE}TARGET_NAME} 
@@ -583,6 +585,21 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
 
   set(${_JPPRE}TARGET_LIST ${${_JPPRE}TARGET_LIST};${${_JPPRE}TARGET_NAME} 
         CACHE INTERNAL "")
+
+
+  source_group("Inline Files" FILES ${${${_JPPRE}TARGET_NAME}_INL})
+  source_group("Inline Files" FILES ${${${_JPPRE}TARGET_NAME}_INS})
+
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL} 
+                                PROPERTIES HEADER_FILE_ONLY TRUE)
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS} 
+                                PROPERTIES HEADER_FILE_ONLY TRUE)
+
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL} 
+                                 PROPERTIES LANGUAGE CXX        )
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS} 
+                                 PROPERTIES LANGUAGE CXX        )
+
 
   add_dependencies(${${_JPPRE}MAIN_LIB_TARGET} ${${_JPPRE}TARGET_NAME})
 
