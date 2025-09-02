@@ -306,6 +306,17 @@ if(MSVC)
   set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::compiler_settings_win)
 
+
+  add_library(${_JTPRE}::compiler_settings_win_stacktrace INTERFACE IMPORTED)
+
+  set_property(TARGET
+                 ${_JTPRE}::compiler_settings_win_stacktrace APPEND PROPERTY
+                   INTERFACE_LINK_LIBRARIES ole32.lib
+                                            Dbgeng.lib)
+
+  set(${_JTPRE}_STACKTRACE_TARGETS
+        ${_JTPRE}::compiler_settings_win_stacktrace CACHE STRING "")
+
 endif()
 
 
