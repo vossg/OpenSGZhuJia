@@ -114,6 +114,9 @@ execute_process(
             "${${_JDPRE}DOXY_MAINPAGE}"   )
 
 
+file(APPEND "${${_JDPRE}DOXY_MAINPAGE}" "\n  \\endif\n")
+file(APPEND "${${_JDPRE}DOXY_MAINPAGE}" "\n */\n")
+
 set(${_JDPRE}DOC_PIPES "")
 
 if(${_JDPRE}DOXY_STDOUT_LOG)
