@@ -124,7 +124,8 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
 
   if(NOT WIN32)
     add_custom_command(
-      TARGET ${PNAME}CreateVersionFile
+      TARGET ${PNAME}CreateVersionFile 
+      POST_BUILD
       COMMAND echo "################### ${PNAME} #################" >  ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
       COMMAND echo -n "head: "                                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
       COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD         >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
@@ -143,7 +144,8 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
     )
   else()
     add_custom_command(
-      TARGET ${PNAME}CreateVersionFile POST_BUILD
+      TARGET ${PNAME}CreateVersionFile 
+      POST_BUILD
       COMMAND ${ZhuJiaSourceDir}/Project/createVersionFile.bat ${GIT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt ${PNAME}
       WORKING_DIRECTORY ${DIRECTORY}
       COMMENT "processing ${PNAME} version"
