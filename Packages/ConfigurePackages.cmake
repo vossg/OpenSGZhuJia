@@ -668,3 +668,25 @@ macro(${_JCPRE}SETUP_SQUISH)
               "with squish       : ${${_JPPRE}WITH_SQUISH}")
 endmacro()
 
+########################################
+# imgui
+########################################
+
+macro(${_JCPRE}SETUP_IMGUI)
+  if(NOT ImGUI_FOUND)
+    find_package(ImGUI CONFIG)
+
+    if(ImGUI_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_IMGUI    1                     )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}IMGUI_TARGETS ImGUI::imgui_ogl3_glfw)
+      if(WIN32)
+        fixupTargetConfigs(ImGUI::imgui_ogl3_glfw)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with imgui        : ${${_JPPRE}WITH_IMGUI}")
+endmacro()
