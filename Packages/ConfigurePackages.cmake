@@ -690,3 +690,37 @@ macro(${_JCPRE}SETUP_IMGUI)
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
               "with imgui        : ${${_JPPRE}WITH_IMGUI}")
 endmacro()
+
+########################################
+# curl
+########################################
+
+macro(${_JCPRE}SETUP_CURL)
+  if(NOT CURL_FOUND)
+
+    if(WIN32)
+      set(_CURL_CFG    CONFIG )
+    endif()
+
+    find_package(CURL ${_CURL_CFG})
+
+    if(CURL_FOUND)
+
+      if(WIN32)
+        add_library(CURL::libcurl ALIAS CURL::libcurl_shared)
+      endif()
+
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_CURL    1            )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}CURL_TARGETS CURL::libcurl)
+      if(WIN32)
+        fixupTargetConfigs(CURL::libcurl       )
+        fixupTargetConfigs(CURL::libcurl_shared)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with curl         : ${${_JPPRE}WITH_CURL}")
+endmacro()
