@@ -699,14 +699,14 @@ macro(${_JCPRE}SETUP_CURL)
   if(NOT CURL_FOUND)
 
     if(WIN32)
-      set(_CURL_CFG    CONFIG )
+      set(_CURL_CFG CONFIG)
     endif()
 
     find_package(CURL ${_CURL_CFG})
 
     if(CURL_FOUND)
 
-      if(WIN32)
+      if(WIN32 AND NOT TARGET CURL::libcurl)
         add_library(CURL::libcurl ALIAS CURL::libcurl_shared)
       endif()
 
@@ -715,7 +715,11 @@ macro(${_JCPRE}SETUP_CURL)
       cmake_language(CALL ${_JCPRE}SET 
                           ${_JPPRE}CURL_TARGETS CURL::libcurl)
       if(WIN32)
-        fixupTargetConfigs(CURL::libcurl       )
+        get_property(_lcat TARGET   "CURL::libcurl" 
+                           PROPERTY ALIASED_TARGET)
+        if(NOT "${_lac}" STREQUAL "")
+          fixupTargetConfigs(CURL::libcurl)
+        endif()
         fixupTargetConfigs(CURL::libcurl_shared)
       endif()
     endif()
@@ -723,4 +727,86 @@ macro(${_JCPRE}SETUP_CURL)
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
               "with curl         : ${${_JPPRE}WITH_CURL}")
+endmacro()
+
+########################################
+# protobuf
+########################################
+
+macro(${_JCPRE}SETUP_PROTOBUF)
+  if(NOT Protobuf_FOUND)
+
+    find_package(Protobuf CONFIG)
+
+    if(Protobuf_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_PROTOBUF    1                    )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}PROTOBUF_TARGETS protobuf::libprotobuf)
+      if(WIN32)
+        fixupTargetConfigs(protobuf::libprotobuf)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with protobuf     : ${${_JPPRE}WITH_PROTOBUF}")
+endmacro()
+
+########################################
+# OpenTelemetry
+########################################
+
+macro(${_JCPRE}SETUP_OPENTELEMETRY)
+
+  if(NOT Protobuf_FOUND)
+    cmake_language(CALL ${_JCPRE}SETUP_PROTOBUF)
+  endif()
+
+  if(NOT opentelemetry-cpp_FOUND)
+    find_package(opentelemetry-cpp CONFIG)
+
+    if(opentelemetry-cpp_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_OTEL    
+                          1                                          )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}OTEL_TARGETS 
+                          opentelemetry-cpp::in_memory_span_exporter
+                          opentelemetry-cpp::ostream_span_exporter
+                          opentelemetry-cpp::otlp_file_exporter      )
+
+      if(opentelemetry-cpp_exporters_otlp_http_FOUND)
+        cmake_language(CALL ${_JCPRE}SET 
+                            ${_JPPRE}OTEL_TARGETS 
+                            ${${_JPPRE}OTEL_TARGETS}
+                            opentelemetry-cpp::otlp_http_exporter)
+      endif()
+
+      if(WIN32)
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter     )
+        fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter)
+        fixupTargetConfigs(opentelemetry-cpp::ostream_span_exporter  )
+ 
+        fixupTargetConfigs(opentelemetry-cpp::common                 )
+        fixupTargetConfigs(opentelemetry-cpp::proto                  )
+        fixupTargetConfigs(opentelemetry-cpp::logs                   )
+        fixupTargetConfigs(opentelemetry-cpp::resources              )
+        fixupTargetConfigs(opentelemetry-cpp::trace                  )
+        fixupTargetConfigs(opentelemetry-cpp::metrics                )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_recordable        )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_client       )
+
+        if(opentelemetry-cpp_exporters_otlp_http_FOUND)
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_exporter)
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_client  )
+          fixupTargetConfigs(opentelemetry-cpp::http_client_curl  )
+        endif()
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with otel         : ${${_JPPRE}WITH_OTEL}")
 endmacro()

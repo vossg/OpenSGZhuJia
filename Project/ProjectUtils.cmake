@@ -137,10 +137,18 @@ endmacro()
 
 macro(${_JCPRE}CHECK_SUPPORTLIB_DIR LIBDIR RELPATH)
   if(NOT ${LIBDIR})
-    if(EXTLIBSDIR AND EXISTS ${EXTLIBSDIR})
+    if(EXTLIBSDIR                            AND
+       EXISTS     "${EXTLIBSDIR}"            AND
+       EXISTS     "${EXTLIBSDIR}/${RELPATH}"    )
+
       set(${LIBDIR} "${EXTLIBSDIR}/${RELPATH}"    CACHE INTERNAL "")
-    elseif(DEFINED ENV{EXTLIBSDIR} AND EXISTS $ENV{EXTLIBSDIR})
+
+    elseif(DEFINED  ENV{EXTLIBSDIR}              AND
+           EXISTS  "$ENV{EXTLIBSDIR}"            AND
+           EXISTS  "$ENV{EXTLIBSDIR}/${RELPATH}"    )
+
       set(${LIBDIR} "$ENV{EXTLIBSDIR}/${RELPATH}" CACHE INTERNAL "")
+
     endif()
   endif()
 endmacro()
