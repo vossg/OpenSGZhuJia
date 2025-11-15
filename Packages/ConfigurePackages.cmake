@@ -724,3 +724,74 @@ macro(${_JCPRE}SETUP_CURL)
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
               "with curl         : ${${_JPPRE}WITH_CURL}")
 endmacro()
+
+########################################
+# protobuf
+########################################
+
+macro(${_JCPRE}SETUP_PROTOBUF)
+  if(NOT protobuf_FOUND)
+
+    find_package(protobuf CONFIG)
+
+    if(protobuf_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_PROTOBUF    1                    )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}PROTOBUF_TARGETS protobuf::libprotobuf)
+      if(WIN32)
+        fixupTargetConfigs(protobuf::libprotobuf)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with protobuf     : ${${_JPPRE}WITH_PROTOBUF}")
+endmacro()
+
+########################################
+# OpenTelemetry
+########################################
+
+macro(${_JCPRE}SETUP_OPENTELEMETRY)
+  if(NOT opentelemetry-cpp_FOUND)
+
+  if(NOT protobuf_FOUND)
+    cmake_language(CALL ${_JCPRE}SETUP_PROTOBUF)
+  endif()
+
+    find_package(opentelemetry-cpp CONFIG)
+
+    if(opentelemetry-cpp_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_OTEL    
+                          1                                          )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}OTEL_TARGETS 
+                          opentelemetry-cpp::in_memory_span_exporter
+                          opentelemetry-cpp::ostream_span_exporter
+                          opentelemetry-cpp::otlp_file_exporter      )
+
+      if(opentelemetry-cpp_exporters_otlp_http_FOUND)
+        cmake_language(CALL ${_JCPRE}SET 
+                            ${_JPPRE}OTEL_TARGETS 
+                            ${${_JPPRE}OTEL_TARGETS}
+                            opentelemetry-cpp::otlp_http_exporter)
+      endif()
+
+      if(WIN32)
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter     )
+        fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter)
+        fixupTargetConfigs(opentelemetry-cpp::ostream_span_exporter  )
+
+        if(opentelemetry-cpp_exporters_otlp_http_FOUND)
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_exporter)
+        endif()
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with otel         : ${${_JPPRE}WITH_OTEL}")
+endmacro()
