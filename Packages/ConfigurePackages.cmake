@@ -176,66 +176,52 @@ endmacro()
 
 macro(${_JCPRE}SETUP_NETWORK_URI)
 
-#  FIND_PACKAGE(NetworkURI CONFIG)
-
   if(NOT NetworkURI_FOUND)
 
-    add_library(NetworkURI::network-uri SHARED IMPORTED)
-
-    set_target_properties(NetworkURI::network-uri PROPERTIES
-      INTERFACE_INCLUDE_DIRECTORIES "${NetworkURI_DIR}/include")
+    find_package(NetworkURI CONFIG)
 
     if(LINUX)
-      set_property(TARGET NetworkURI::network-uri  
-                     APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+    else()
 
-      set(_NWU_LIB "${NetworkURI_DIR}/lib64/libnetwork-uri.so.0.1.0")
+#      add_library(NetworkURI::network-uri SHARED IMPORTED)
 
-      if(NOT EXISTS ${_NWU_LIB})
-        set(_NWU_LIB "${NetworkURI_DIR}/lib64/libnetwork-uri.so")
+#      set_target_properties(NetworkURI::network-uri PROPERTIES
+
+#      INTERFACE_INCLUDE_DIRECTORIES "${NetworkURI_DIR}/include")
+
+#      set_property(TARGET NetworkURI::network-uri 
+#                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug       )
+#      set_property(TARGET NetworkURI::network-uri 
+#                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Release     )
+#      set_property(TARGET NetworkURI::network-uri 
+#                     APPEND PROPERTY IMPORTED_CONFIGURATIONS DebugOpt    )
+#      set_property(TARGET NetworkURI::network-uri 
+#                     APPEND PROPERTY IMPORTED_CONFIGURATIONS ReleaseNoOpt)
+
+#      set_target_properties(NetworkURI::network-uri PROPERTIES
+#        IMPORTED_LOCATION_DEBUG        "${NetworkURI_DIR}/lib/network-urid.dll"
+#        IMPORTED_LOCATION_DEBUGOPT     "${NetworkURI_DIR}/lib/network-urid.dll"
+#        IMPORTED_LOCATION_RELEASE      "${NetworkURI_DIR}/lib/network-uri.dll"
+#        IMPORTED_LOCATION_RELEASENOOPT "${NetworkURI_DIR}/lib/network-uri.dll"
+
+#        IMPORTED_IMPLIB_DEBUG        "${NetworkURI_DIR}/lib/network-urid.lib"
+#        IMPORTED_IMPLIB_DEBUGOPT     "${NetworkURI_DIR}/lib/network-urid.lib"
+#        IMPORTED_IMPLIB_RELEASE      "${NetworkURI_DIR}/lib/network-uri.lib"
+#        IMPORTED_IMPLIB_RELEASENOOPT "${NetworkURI_DIR}/lib/network-uri.lib")
+
+    endif()
+
+    if(NetworkURI_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}WITH_NETWORKURI    1                      )
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}NETWORKURI_TARGETS NetworkURI::network-uri)
+
+      if(WIN32)
+        fixupTargetConfigs(NetworkURI::network-uri)
       endif()
-
-      set_target_properties(NetworkURI::network-uri PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${_NWU_LIB}"
-        IMPORTED_SONAME_RELEASE "libnetwork-uri.so.0.1.0"     )
-
-    else()
-
-      set_property(TARGET NetworkURI::network-uri 
-                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug       )
-      set_property(TARGET NetworkURI::network-uri 
-                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Release     )
-      set_property(TARGET NetworkURI::network-uri 
-                     APPEND PROPERTY IMPORTED_CONFIGURATIONS DebugOpt    )
-      set_property(TARGET NetworkURI::network-uri 
-                     APPEND PROPERTY IMPORTED_CONFIGURATIONS ReleaseNoOpt)
-
-      set_target_properties(NetworkURI::network-uri PROPERTIES
-        IMPORTED_LOCATION_DEBUG        "${NetworkURI_DIR}/lib/network-urid.dll"
-        IMPORTED_LOCATION_DEBUGOPT     "${NetworkURI_DIR}/lib/network-urid.dll"
-        IMPORTED_LOCATION_RELEASE      "${NetworkURI_DIR}/lib/network-uri.dll"
-        IMPORTED_LOCATION_RELEASENOOPT "${NetworkURI_DIR}/lib/network-uri.dll"
-
-        IMPORTED_IMPLIB_DEBUG        "${NetworkURI_DIR}/lib/network-urid.lib"
-        IMPORTED_IMPLIB_DEBUGOPT     "${NetworkURI_DIR}/lib/network-urid.lib"
-        IMPORTED_IMPLIB_RELEASE      "${NetworkURI_DIR}/lib/network-uri.lib"
-        IMPORTED_IMPLIB_RELEASENOOPT "${NetworkURI_DIR}/lib/network-uri.lib")
     endif()
 
-    if(EXISTS "${NetworkURI_DIR}/include")
-      set(NetworkURI_FOUND TRUE)
-    else()
-      message(WARNING "network uri not found, "
-                      "NetworkURI_DIR (${NetworkURI_DIR}) either wrong or "
-                      "not present"                                        )
-    endif()
-  endif()
-
-  if(NetworkURI_FOUND)
-     cmake_language(CALL ${_JCPRE}SET 
-                      ${_JPPRE}WITH_NETWORKURI    1                      )
-     cmake_language(CALL ${_JCPRE}SET 
-                      ${_JPPRE}NETWORKURI_TARGETS NetworkURI::network-uri)
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
@@ -324,25 +310,16 @@ endmacro()
 
 macro(${_JCPRE}SETUP_JSONSPIRIT)
   if(NOT jsonSpirit_FOUND)
-    add_library(json_spirit INTERFACE IMPORTED)
-    set_property(TARGET json_spirit PROPERTY
-                 INTERFACE_INCLUDE_DIRECTORIES ${jsonSpirit_DIR}/include)
 
-    if(EXISTS "${jsonSpirit_DIR}/include"                                 AND
-       EXISTS "${jsonSpirit_DIR}/include/json_spirit/json_spirit_value.h"    )
-      set(jsonSpirit_FOUND TRUE)
-    else()
-      message(WARNING "json spirit not found, "
-                      "jsonSpirit_DIR (${jsonSpirit_DIR}) either wrong or "
-                      "not present"                                        )
+    find_package(jsonSpirit CONFIG)
+
+    if(jsonSpirit_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}WITH_JSONSPIRIT    1          )
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}JSONSPIRIT_TARGETS json_spirit)
     endif()
-  endif()
 
-  if(jsonSpirit_FOUND)
-    cmake_language(CALL ${_JCPRE}SET 
-                     ${_JPPRE}WITH_JSONSPIRIT    1          )
-    cmake_language(CALL ${_JCPRE}SET 
-                     ${_JPPRE}JSONSPIRIT_TARGETS json_spirit)
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
@@ -383,25 +360,18 @@ endmacro()
 ########################################
 
 macro(${_JCPRE}SETUP_SIMPLEWEBSERVER)
+
   if(NOT SimpleWebServer_FOUND)
-    add_library(SimpleWebServer INTERFACE IMPORTED)
-    set_property(TARGET SimpleWebServer PROPERTY
-                 INTERFACE_INCLUDE_DIRECTORIES ${SimpleWebServer_DIR}/include)
 
-    if(EXISTS "${SimpleWebServer_DIR}/include")
-      set(SimpleWebServer_FOUND TRUE)
-    else()
-      message(WARNING "SimpleWebServer not found, "
-                      "SimpleWebServer_DIR (${SimpleWebServer_DIR}) "
-                      "either wrong or not present"                  )
-    endif()
-  endif()
+    find_package(SimpleWebServer CONFIG)
 
-  if(SimpleWebServer_FOUND)
-    cmake_language(CALL ${_JCPRE}SET 
-                     ${_JPPRE}WITH_SIMPLEWEBSERVER    1              )
-    cmake_language(CALL ${_JCPRE}SET 
+    if(SimpleWebServer_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}WITH_SIMPLEWEBSERVER    1              )
+      cmake_language(CALL ${_JCPRE}SET 
                      ${_JPPRE}SIMPLEWEBSERVER_TARGETS SimpleWebServer)
+    endif()
+
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
@@ -413,26 +383,18 @@ endmacro()
 ########################################
 
 macro(${_JCPRE}SETUP_SIMPLEWEBSOCKETSERVER)
+
   if(NOT SimpleWSocketServer_FOUND)
-    add_library(SimpleWSocketServer INTERFACE IMPORTED)
-    set_property(TARGET SimpleWSocketServer PROPERTY
-                 INTERFACE_INCLUDE_DIRECTORIES 
-                   ${SimpleWSocketServer_DIR}/include)
 
-    if(EXISTS "${SimpleWSocketServer_DIR}/include")
-      set(SimpleWSocketServer_FOUND TRUE)
-    else()
-      message(WARNING "SimpleWSocketServer not found, "
-                      "SimpleWSocketServer_DIR (${SimpleWSocketServer_DIR}) "
-                      "either wrong or not present"                         )
+    find_package(SimpleWSocketServer CONFIG)
+
+    if(SimpleWSocketServer_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}WITH_SIMPLEWSOCKETSERVER    1                  )
+      cmake_language(CALL ${_JCPRE}SET 
+                       ${_JPPRE}SIMPLEWSOCKETSERVER_TARGETS SimpleWSocketServer)
     endif()
-  endif()
 
-  if(SimpleWSocketServer_FOUND)
-    cmake_language(CALL ${_JCPRE}SET 
-                     ${_JPPRE}WITH_SIMPLEWSOCKETSERVER    1                  )
-    cmake_language(CALL ${_JCPRE}SET 
-                     ${_JPPRE}SIMPLEWSOCKETSERVER_TARGETS SimpleWSocketServer)
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES 
