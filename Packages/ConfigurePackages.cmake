@@ -305,6 +305,29 @@ macro(${_JCPRE}SETUP_RAPIDJSON)
 endmacro()
 
 ########################################
+# yaml-cpp
+########################################
+
+macro(${_JCPRE}SETUP_YAMLCPP)
+  if(NOT yaml-cpp_FOUND)
+    find_package(yaml-cpp CONFIG)
+
+    if(yaml-cpp_FOUND)
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}WITH_YAMLCPP    1                 )
+      cmake_language(CALL ${_JCPRE}SET 
+                          ${_JPPRE}YAMLCPP_TARGETS yaml-cpp::yaml-cpp)
+      if(WIN32)
+        fixupTargetConfigs(yaml-cpp::yaml-cpp)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+              "with yamp-cpp     : ${${_JPPRE}WITH_YAMLCPP}")
+endmacro()
+
+########################################
 # json spirit
 ########################################
 
