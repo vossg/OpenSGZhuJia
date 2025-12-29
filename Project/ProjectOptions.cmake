@@ -57,6 +57,11 @@ if(WIN32)
 endif(WIN32)
 
 
+## Features
+
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_OTEL        
+               "Use OTEL"                                             ON )
+
 ## Tests
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_TESTS        

@@ -17,7 +17,7 @@ macro(fixupBoostDllLocation _COMPONENT)
 
 endmacro()
 
-macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
+macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
 
   set(Boost_USE_MULTITHREADED    ON)
   set(Boost_NO_WARN_NEW_VERSIONS ON)
@@ -37,12 +37,19 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS)
   unset(Boost_USE_DEBUG_RUNTIME )
   unset(Boost_USE_STATIC_RUNTIME)
 
-  message(STATUS "  looking for boost components: ${${_COMPONENTS}}")
+  if(${_REQUIRED})
+    set(_REQ_PARAM "REQUIRED")
+  endif()
+
+  message(STATUS 
+          "  looking for boost components: ${${_COMPONENTS}} | ${_REQ_PARAM}")
 
 #  set(Boost_VERBOSE TRUE)
 #  set(Boost_DEBUG TRUE)
 
-  find_package(Boost COMPONENTS ${${_COMPONENTS}} CONFIG)
+  find_package(Boost ${_REQ_PARAM} COMPONENTS ${${_COMPONENTS}} CONFIG)
+
+  unset(_REQ_PARAM)
 
   if(Boost_FOUND)
 
@@ -102,9 +109,13 @@ endmacro()
 # OpenGL
 ########################################
 
-macro(${_JCPRE}SETUP_OPENGL)
+macro(${_JCPRE}SETUP_OPENGL _REQUIRED)
 
   set(_OGL_COMPONENTS OpenGL)
+
+  if(${_REQUIRED})
+    set(_REQ_PARAM "REQUIRED")
+  endif()
 
   if(LINUX)
     list(APPEND _OGL_COMPONENTS GLX)
@@ -119,7 +130,7 @@ macro(${_JCPRE}SETUP_OPENGL)
   endif()
 
   if(NOT ${_JPPRE}NO_OPENGL)
-    find_package(OpenGL COMPONENTS ${_OGL_COMPONENTS})
+    find_package(OpenGL ${_REQ_PARAM} COMPONENTS ${_OGL_COMPONENTS})
 
     if(NOT ${_JPPRE}NO_EGL AND OpenGL_EGL_FOUND)
       set(${_JPPRE}WITH_EGL   1           )
@@ -136,6 +147,8 @@ macro(${_JCPRE}SETUP_OPENGL)
       set(${_JPPRE}GLU_TARGETS OpenGL::GLU)
     endif()
   endif()
+
+  unset(_REQ_PARAM)
 
   message(STATUS " opengl: OpenGL : ${OpenGL_OpenGL_FOUND}")
   message(STATUS "         GLX    : ${OpenGL_GLX_FOUND}"   )
@@ -157,9 +170,15 @@ endmacro()
 # glm
 ########################################
 
-macro(${_JCPRE}SETUP_GLM)
+macro(${_JCPRE}SETUP_GLM _REQUIRED)
 
-  find_package(glm CONFIG)
+  if(${_REQUIRED})
+    set(_REQ_PARAM "REQUIRED")
+  endif()
+
+  find_package(glm ${_REQ_PARAM} CONFIG)
+
+  unset(_REQ_PARAM)
 
   if(glm_FOUND)
     cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_GLM    1       )
@@ -174,11 +193,17 @@ endmacro()
 # network uri
 ########################################
 
-macro(${_JCPRE}SETUP_NETWORK_URI)
+macro(${_JCPRE}SETUP_NETWORK_URI _REQUIRED)
 
   if(NOT NetworkURI_FOUND)
 
-    find_package(NetworkURI CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(NetworkURI ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(LINUX)
     else()
@@ -233,9 +258,15 @@ endmacro()
 # glew
 ########################################
 
-macro(${_JCPRE}SETUP_GLEW)
+macro(${_JCPRE}SETUP_GLEW _REQUIRED)
   if(NOT glew_FOUND)
-    find_package(glew CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(glew ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(glew_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_GLEW    1         )
@@ -258,9 +289,15 @@ endmacro()
 # diben
 ########################################
 
-macro(${_JCPRE}SETUP_DIBEN)
+macro(${_JCPRE}SETUP_DIBEN _REQUIRED)
   if(NOT diben_FOUND)
-    find_package(diben CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(diben ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(diben_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -290,9 +327,15 @@ endmacro()
 # rapid json
 ########################################
 
-macro(${_JCPRE}SETUP_RAPIDJSON)
+macro(${_JCPRE}SETUP_RAPIDJSON _REQUIRED)
   if(NOT RapidJSON_FOUND)
-    find_package(RapidJSON CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(RapidJSON ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(RapidJSON_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_RAPIDJSON    1        )
@@ -308,9 +351,15 @@ endmacro()
 # yaml-cpp
 ########################################
 
-macro(${_JCPRE}SETUP_YAMLCPP)
+macro(${_JCPRE}SETUP_YAMLCPP _REQUIRED)
   if(NOT yaml-cpp_FOUND)
-    find_package(yaml-cpp CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(yaml-cpp ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(yaml-cpp_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -331,10 +380,16 @@ endmacro()
 # json spirit
 ########################################
 
-macro(${_JCPRE}SETUP_JSONSPIRIT)
+macro(${_JCPRE}SETUP_JSONSPIRIT _REQUIRED)
   if(NOT jsonSpirit_FOUND)
 
-    find_package(jsonSpirit CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(jsonSpirit ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(jsonSpirit_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -354,13 +409,19 @@ endmacro()
 # openssl
 ########################################
 
-macro(${_JCPRE}SETUP_OPENSSL)
+macro(${_JCPRE}SETUP_OPENSSL _REQUIRED)
   if(NOT OPENSSL_FOUND)   
-    if(WIN32)
-      find_package(OpenSSL CONFIG)
-    else()
-      find_package(OpenSSL)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
     endif()
+
+    if(WIN32)
+      find_package(OpenSSL ${_REQ_PARAM} CONFIG)
+    else()
+      find_package(OpenSSL ${_REQ_PARAM}       )
+    endif()
+
+    unset(_REQ_PARAM)
 
     if(OPENSSL_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -382,11 +443,17 @@ endmacro()
 # simple web server
 ########################################
 
-macro(${_JCPRE}SETUP_SIMPLEWEBSERVER)
+macro(${_JCPRE}SETUP_SIMPLEWEBSERVER _REQUIRED)
 
   if(NOT SimpleWebServer_FOUND)
 
-    find_package(SimpleWebServer CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(SimpleWebServer ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(SimpleWebServer_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -405,11 +472,17 @@ endmacro()
 # simple web socket server
 ########################################
 
-macro(${_JCPRE}SETUP_SIMPLEWEBSOCKETSERVER)
+macro(${_JCPRE}SETUP_SIMPLEWEBSOCKETSERVER _REQUIRED)
 
   if(NOT SimpleWSocketServer_FOUND)
 
-    find_package(SimpleWSocketServer CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(SimpleWSocketServer ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(SimpleWSocketServer_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -428,8 +501,14 @@ endmacro()
 # flatbuffer
 ########################################
 
-macro(${_JCPRE}SETUP_FLATBUFFER)
-  find_package(Flatbuffers CONFIG)
+macro(${_JCPRE}SETUP_FLATBUFFER _REQUIRED)
+  if(${_REQUIRED})
+    set(_REQ_PARAM "REQUIRED")
+  endif()
+
+  find_package(Flatbuffers ${_REQ_PARAM} CONFIG)
+
+  unset(_REQ_PARAM)
 
   if(Flatbuffers_FOUND AND TARGET flatbuffers::flatc)
     cmake_language(CALL ${_JCPRE}SET 
@@ -461,9 +540,16 @@ endmacro()
 # catch2
 ########################################
 
-macro(${_JCPRE}SETUP_CATCH2)
+macro(${_JCPRE}SETUP_CATCH2 _REQUIRED)
   if(NOT Catch2_FOUND)
-    find_package(Catch2 CONFIG)
+
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Catch2 ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(Catch2_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -490,9 +576,15 @@ endmacro()
 # glfw
 ########################################
 
-macro(${_JCPRE}SETUP_GLFW)
+macro(${_JCPRE}SETUP_GLFW _REQUIRED)
   if(NOT glfw3_FOUND)
-    find_package(glfw3 CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(glfw3 ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(glfw3_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_GLFW3    1   )
@@ -512,9 +604,15 @@ endmacro()
 # TBB
 ########################################
 
-macro(${_JCPRE}SETUP_TBB)
+macro(${_JCPRE}SETUP_TBB _REQUIRED)
   if(NOT TBB_FOUND)
-    find_package(TBB CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(TBB ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(TBB_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_TBB    1       )
@@ -534,14 +632,20 @@ endmacro()
 # embree 4
 ########################################
 
-macro(${_JCPRE}SETUP_EMBREE)
+macro(${_JCPRE}SETUP_EMBREE _REQUIRED)
 
   if(LINUX AND NOT TBB_FOUND)
-    cmake_language(CALL ${_JCPRE}SETUP_TBB)
+    cmake_language(CALL ${_JCPRE}SETUP_TBB TRUE)
   endif()
 
   if(NOT Embree_FOUND)
-    find_package(Embree 4 CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Embree 4 ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(Embree_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_EMBREE    1     )
@@ -567,9 +671,15 @@ endmacro()
 # zlib
 ########################################
 
-macro(${_JCPRE}SETUP_ZLIB)
+macro(${_JCPRE}SETUP_ZLIB _REQUIRED)
   if(NOT ZLIB_FOUND)
-    find_package(ZLIB) # CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(ZLIB ${_REQ_PARAM}) # CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(ZLIB_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_ZLIB    1         )
@@ -589,9 +699,15 @@ endmacro()
 # png
 ########################################
 
-macro(${_JCPRE}SETUP_PNG)
+macro(${_JCPRE}SETUP_PNG _REQUIRED)
   if(NOT PNG_FOUND)
-    find_package(PNG) # CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(PNG ${_REQ_PARAM}) # CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(PNG_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_PNG    1       )
@@ -611,9 +727,15 @@ endmacro()
 # fast dxt
 ########################################
 
-macro(${_JCPRE}SETUP_FASTDXT)
+macro(${_JCPRE}SETUP_FASTDXT _REQUIRED)
   if(NOT FastDXT_FOUND)
-    find_package(FastDXT CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(FastDXT ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(FastDXT_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -635,9 +757,15 @@ endmacro()
 # squish
 ########################################
 
-macro(${_JCPRE}SETUP_SQUISH)
+macro(${_JCPRE}SETUP_SQUISH _REQUIRED)
   if(NOT Squish_FOUND)
-    find_package(Squish CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Squish ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(Squish_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_SQUISH    1             )
@@ -657,9 +785,15 @@ endmacro()
 # imgui
 ########################################
 
-macro(${_JCPRE}SETUP_IMGUI)
+macro(${_JCPRE}SETUP_IMGUI _REQUIRED)
   if(NOT ImGUI_FOUND)
-    find_package(ImGUI CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(ImGUI ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(ImGUI_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
@@ -680,14 +814,20 @@ endmacro()
 # curl
 ########################################
 
-macro(${_JCPRE}SETUP_CURL)
+macro(${_JCPRE}SETUP_CURL _REQUIRED)
   if(NOT CURL_FOUND)
 
     if(WIN32)
       set(_CURL_CFG CONFIG)
     endif()
 
-    find_package(CURL ${_CURL_CFG})
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(CURL ${_REQ_PARAM} ${_CURL_CFG})
+
+    unset(_REQ_PARAM)
 
     if(CURL_FOUND)
 
@@ -718,10 +858,16 @@ endmacro()
 # protobuf
 ########################################
 
-macro(${_JCPRE}SETUP_PROTOBUF)
+macro(${_JCPRE}SETUP_PROTOBUF _REQUIRED)
   if(NOT Protobuf_FOUND)
 
-    find_package(Protobuf CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Protobuf ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(Protobuf_FOUND)
 
@@ -743,14 +889,20 @@ endmacro()
 # OpenTelemetry
 ########################################
 
-macro(${_JCPRE}SETUP_OPENTELEMETRY)
+macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
 
   if(NOT Protobuf_FOUND)
-    cmake_language(CALL ${_JCPRE}SETUP_PROTOBUF)
+    cmake_language(CALL ${_JCPRE}SETUP_PROTOBUF ${_REQUIRED})
   endif()
 
   if(NOT opentelemetry-cpp_FOUND)
-    find_package(opentelemetry-cpp CONFIG)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(opentelemetry-cpp ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
 
     if(opentelemetry-cpp_FOUND)
       cmake_language(CALL ${_JCPRE}SET 
