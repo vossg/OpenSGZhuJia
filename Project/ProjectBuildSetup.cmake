@@ -98,14 +98,14 @@ if(CMAKE_COMPILER_IS_GNUCC)
                                __STDC_FORMAT_MACROS                )
 
   target_compile_options    (${_JTPRE}::compiler_settings INTERFACE
-                               -Wall      -Wextra 
+                               -Wall      -Wextra
                                -Wshadow   -Werror
                                -Wpedantic -Weffc++
 
                                -Wno-unused-parameter
-                               -Wreturn-type 
-                               -Wold-style-cast 
-                               -Wno-unused-parameter 
+                               -Wreturn-type
+                               -Wold-style-cast
+                               -Wno-unused-parameter
                                -Wwrite-strings      )
 
   target_compile_options    (
@@ -190,25 +190,25 @@ if(MSVC)
 
     set(CMAKE_CXX_FLAGS_RELEASENOOPT
         "${__CXX_FLAGS_RELEASENOOPT} /DOSG_DEBUG"
-        CACHE STRING 
+        CACHE STRING
           "Flags used by the C++ compiler during release no opt builds."
         FORCE)
 
     set(CMAKE_C_FLAGS_RELEASENOOPT
         "${__C_FLAGS_RELEASENOOPT} /DOSG_DEBUG"
-        CACHE STRING 
+        CACHE STRING
           "Flags used by the C compiler during release no opt builds."
         FORCE)
 
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASENOOPT
         "${CMAKE_SHARED_LINKER_FLAGS_DEBUG}"
-        CACHE STRING 
+        CACHE STRING
           "Flags used by the shared lib linker during release no opt builds."
         FORCE)
 
     set(CMAKE_EXE_LINKER_FLAGS_RELEASENOOPT
         "${CMAKE_EXE_LINKER_FLAGS_DEBUG}"
-        CACHE STRING 
+        CACHE STRING
           "Flags used by the exe linker during release no opt builds."
         FORCE)
 
@@ -238,7 +238,7 @@ if(MSVC)
 
     set(CMAKE_SHARED_LINKER_FLAGS_DEBUGOPT
         "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /debug"
-        CACHE STRING 
+        CACHE STRING
           "Flags used by the shared lib linker during debug opt builds."
         FORCE)
 
@@ -361,33 +361,33 @@ string(APPEND ${_JTPRE}CompilerConfigString
 if(${_JPPRE}ENABLE_SSE4)
   message(STATUS "Apply sse4 settings (${${_JPPRE}SSE4_VARIANT})")
 
-  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY 
+  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::sse${${_JPPRE}SSE4_VARIANT})
 elseif(${_JPPRE}ENABLE_SSE2)
   message(STATUS "Apply sse2 settings")
 
-  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY 
+  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::sse2)
 endif()
 
 if(${_JPPRE}ENABLE_AVX)
   MESSAGE(STATUS "Apply avx settings (${${_JPPRE}AVX_VARIANT}) ")
 
-  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY 
+  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::avx${${_JPPRE}AVX_VARIANT})
 endif()
 
 if(${_JPPRE}ENABLE_FMA)
   message(STATUS "Apply fma settings")
 
-  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY 
+  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::fma          )
 endif()
 
 if(${_JPPRE}ENABLE_ABI6)
   MESSAGE(STATUS "Apply abi6 settings")
 
-  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY 
+  set_property(TARGET ${_JTPRE}::compiler_settings APPEND PROPERTY
                  INTERFACE_LINK_LIBRARIES ${_JTPRE}::abi6         )
 endif()
 

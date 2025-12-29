@@ -4,11 +4,11 @@
 #############################################################################
 
 if(WIN32)
-  set(CMAKE_CONFIGURATION_TYPES 
+  set(CMAKE_CONFIGURATION_TYPES
         "Debug;Release;DebugOpt;ReleaseNoOpt"
         CACHE STRING "${PROJECT_NAME} Build Types" FORCE)
 else()
-  set(CMAKE_CONFIGURATION_TYPES 
+  set(CMAKE_CONFIGURATION_TYPES
         "Debug;Release;DebugGV;ReleaseGV"
         CACHE STRING "${PROJECT_NAME} Build Types" FORCE)
 endif() # WIN32
@@ -59,4 +59,4 @@ if(NOT WIN32)
   set(ColorBold  "${__Esc}[1m")
   set(ColorRed   "${__Esc}[31m")
 endif()
- 
+

@@ -9,11 +9,11 @@ cmake_language(CALL ${_JCPRE}OPTION CMAKE_VERBOSE_MAKEFILE "" ON)
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_SSE2     ""    OFF)
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_SSE4     ""    ON )
-cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}SSE4_VARIANT    
+cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}SSE4_VARIANT
                     "4.2" CACHE STRING "")
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_AVX      ""    OFF)
-cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}AVX_VARIANT 
+cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}AVX_VARIANT
                     ""    CACHE STRING "")
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_FMA      ""    OFF)
@@ -29,7 +29,7 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}GCC_USE_ATOMICS ""    ON )
 
 ## library type
 
-cmake_language(CALL ${_JCPRE}SET ${_JPPRE}BUILD_SHARED_LIBS         ON 
+cmake_language(CALL ${_JCPRE}SET ${_JPPRE}BUILD_SHARED_LIBS         ON
                     CACHE INTERNAL "Set to OFF to build static libraries")
 
 ## Debugging
@@ -59,20 +59,20 @@ endif(WIN32)
 
 ## Features
 
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_OTEL        
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_OTEL
                "Use OTEL"                                             ON )
 
 ## Tests
 
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_TESTS        
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_TESTS
                "Build test programs"                                  ON )
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_APPS        
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_APPS
                "Build app programs"                                   ON )
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_UNITTESTS                    
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_UNITTESTS
                "Build/run unit test programs"                         ON )
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_UNITBENCH                    
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_UNITBENCH
                "Build/run unit test benchmark programs"               ON )
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_EXAMPLES_SIMPLE              
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_EXAMPLES_SIMPLE
                "Build example programs during system build"           OFF)
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_EXAMPLES_ADVANCED
                "Build advanced example programs during system build"  OFF)
@@ -92,7 +92,7 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}EXCLUDE_EXAMPLES_SIMPLE_FROM_ALL
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}EXCLUDE_EXAMPLES_ADVANCED_FROM_ALL
               "Build advanced example programs during system build"   OFF     )
 
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_TESTCONTAINER               
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_TESTCONTAINER
               ""                                                      OFF     )
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}EXCLUDE_BENCH_FROM_TEST

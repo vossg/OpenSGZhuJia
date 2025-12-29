@@ -41,7 +41,7 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
     set(_REQ_PARAM "REQUIRED")
   endif()
 
-  message(STATUS 
+  message(STATUS
           "  looking for boost components: ${${_COMPONENTS}} | ${_REQ_PARAM}")
 
 #  set(Boost_VERBOSE TRUE)
@@ -54,8 +54,8 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
   if(Boost_FOUND)
 
     add_library(Boost::custom_definitions INTERFACE IMPORTED)
-    set_property(TARGET Boost::custom_definitions 
-                   PROPERTY INTERFACE_COMPILE_DEFINITIONS 
+    set_property(TARGET Boost::custom_definitions
+                   PROPERTY INTERFACE_COMPILE_DEFINITIONS
                      "BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1")
 
     set(        ${_JPPRE}BOOST_TARGETS Boost::dynamic_linking    )
@@ -185,7 +185,7 @@ macro(${_JCPRE}SETUP_GLM _REQUIRED)
     cmake_language(CALL ${_JCPRE}SET ${_JPPRE}GLM_TARGETS glm::glm)
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with glm          : ${${_JPPRE}WITH_GLM}")
 endmacro()
 
@@ -214,13 +214,13 @@ macro(${_JCPRE}SETUP_NETWORK_URI _REQUIRED)
 
 #      INTERFACE_INCLUDE_DIRECTORIES "${NetworkURI_DIR}/include")
 
-#      set_property(TARGET NetworkURI::network-uri 
+#      set_property(TARGET NetworkURI::network-uri
 #                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug       )
-#      set_property(TARGET NetworkURI::network-uri 
+#      set_property(TARGET NetworkURI::network-uri
 #                     APPEND PROPERTY IMPORTED_CONFIGURATIONS Release     )
-#      set_property(TARGET NetworkURI::network-uri 
+#      set_property(TARGET NetworkURI::network-uri
 #                     APPEND PROPERTY IMPORTED_CONFIGURATIONS DebugOpt    )
-#      set_property(TARGET NetworkURI::network-uri 
+#      set_property(TARGET NetworkURI::network-uri
 #                     APPEND PROPERTY IMPORTED_CONFIGURATIONS ReleaseNoOpt)
 
 #      set_target_properties(NetworkURI::network-uri PROPERTIES
@@ -237,9 +237,9 @@ macro(${_JCPRE}SETUP_NETWORK_URI _REQUIRED)
     endif()
 
     if(NetworkURI_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_NETWORKURI    1                      )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}NETWORKURI_TARGETS NetworkURI::network-uri)
 
       if(WIN32)
@@ -249,7 +249,7 @@ macro(${_JCPRE}SETUP_NETWORK_URI _REQUIRED)
 
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with cppuri       : ${${_JPPRE}WITH_NETWORKURI}")
 
 endmacro()
@@ -281,7 +281,7 @@ macro(${_JCPRE}SETUP_GLEW _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with glew         : ${${_JPPRE}WITH_GLEW}")
 endmacro()
 
@@ -300,11 +300,11 @@ macro(${_JCPRE}SETUP_DIBEN _REQUIRED)
     unset(_REQ_PARAM)
 
     if(diben_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_DIBEN     1                )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}DIBEN_TARGETS  diben::diben     )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}FBSEXTRACT_EXE diben::fbsExtract)
 
       fixupTargetConfigs(diben::diben)
@@ -313,13 +313,13 @@ macro(${_JCPRE}SETUP_DIBEN _REQUIRED)
 
   IF(FALSE)
     ADD_LIBRARY(i3dhubConstGen INTERFACE)
-    TARGET_INCLUDE_DIRECTORIES(i3dhubConstGen SYSTEM INTERFACE 
+    TARGET_INCLUDE_DIRECTORIES(i3dhubConstGen SYSTEM INTERFACE
       "${CMAKE_CURRENT_SOURCE_DIR}/../ARVIDA_Pixi/Source/GenStatic")
 
       SET(I3DH_CONSTGEN_TARGET i3dhubConstGen)
   ENDIF()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with diben        : ${${_JPPRE}WITH_DIBEN}")
 endmacro()
 
@@ -343,7 +343,7 @@ macro(${_JCPRE}SETUP_RAPIDJSON _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with rapidjson    : ${${_JPPRE}WITH_RAPIDJSON}")
 endmacro()
 
@@ -362,9 +362,9 @@ macro(${_JCPRE}SETUP_YAMLCPP _REQUIRED)
     unset(_REQ_PARAM)
 
     if(yaml-cpp_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}WITH_YAMLCPP    1                 )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}YAMLCPP_TARGETS yaml-cpp::yaml-cpp)
       if(WIN32)
         fixupTargetConfigs(yaml-cpp::yaml-cpp)
@@ -372,7 +372,7 @@ macro(${_JCPRE}SETUP_YAMLCPP _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with yamp-cpp     : ${${_JPPRE}WITH_YAMLCPP}")
 endmacro()
 
@@ -392,15 +392,15 @@ macro(${_JCPRE}SETUP_JSONSPIRIT _REQUIRED)
     unset(_REQ_PARAM)
 
     if(jsonSpirit_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_JSONSPIRIT    1          )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}JSONSPIRIT_TARGETS json_spirit)
     endif()
 
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with json spirit  : ${${_JPPRE}WITH_JSONSPIRIT}")
 endmacro()
 
@@ -410,7 +410,7 @@ endmacro()
 ########################################
 
 macro(${_JCPRE}SETUP_OPENSSL _REQUIRED)
-  if(NOT OPENSSL_FOUND)   
+  if(NOT OPENSSL_FOUND)
     if(${_REQUIRED})
       set(_REQ_PARAM "REQUIRED")
     endif()
@@ -424,9 +424,9 @@ macro(${_JCPRE}SETUP_OPENSSL _REQUIRED)
     unset(_REQ_PARAM)
 
     if(OPENSSL_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_OPENSSL    1                           )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}OPENSSL_TARGETS OpenSSL::SSL;OpenSSL::Crypto)
 
 #    requires debug OpenSSL builds
@@ -435,7 +435,7 @@ macro(${_JCPRE}SETUP_OPENSSL _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with openssl      : ${${_JPPRE}WITH_OPENSSL}")
 endmacro()
 
@@ -456,15 +456,15 @@ macro(${_JCPRE}SETUP_SIMPLEWEBSERVER _REQUIRED)
     unset(_REQ_PARAM)
 
     if(SimpleWebServer_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_SIMPLEWEBSERVER    1              )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                      ${_JPPRE}SIMPLEWEBSERVER_TARGETS SimpleWebServer)
     endif()
 
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with http server  : ${${_JPPRE}WITH_SIMPLEWEBSERVER}")
 endmacro()
 
@@ -485,15 +485,15 @@ macro(${_JCPRE}SETUP_SIMPLEWEBSOCKETSERVER _REQUIRED)
     unset(_REQ_PARAM)
 
     if(SimpleWSocketServer_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}WITH_SIMPLEWSOCKETSERVER    1                  )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}SIMPLEWSOCKETSERVER_TARGETS SimpleWSocketServer)
     endif()
 
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with ws server    : ${${_JPPRE}WITH_SIMPLEWSOCKETSERVER}")
 endmacro()
 
@@ -511,27 +511,27 @@ macro(${_JCPRE}SETUP_FLATBUFFER _REQUIRED)
   unset(_REQ_PARAM)
 
   if(Flatbuffers_FOUND AND TARGET flatbuffers::flatc)
-    cmake_language(CALL ${_JCPRE}SET 
+    cmake_language(CALL ${_JCPRE}SET
                      ${_JPPRE}WITH_FLATBUFFERS 1                 )
-    cmake_language(CALL 
+    cmake_language(CALL
                      ${_JCPRE}SET ${_JPPRE}FLATC            flatbuffers::flatc)
 
     if(NOT WIN32)
-      cmake_language(CALL ${_JCPRE}SET 
-                       ${_JPPRE}FLATBUFFERS_TARGETS 
+      cmake_language(CALL ${_JCPRE}SET
+                       ${_JPPRE}FLATBUFFERS_TARGETS
                          flatbuffers::flatbuffers_shared)
     else()
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                        ${_JPPRE}FLATBUFFERS_TARGETS flatbuffers::flatbuffers)
 
       fixupTargetConfigs(flatbuffers::flatbuffers)
     endif()
 
-    list(APPEND ${_JPPRE}ADDITIONAL_CONFIGURE_LINES 
+    list(APPEND ${_JPPRE}ADDITIONAL_CONFIGURE_LINES
          "#cmakedefine ${_JPPRE}WITH_FLATBUFFERS 1")
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with flatbuffer   : ${${_JPPRE}WITH_FLATBUFFERS}")
 
 endmacro()
@@ -552,9 +552,9 @@ macro(${_JCPRE}SETUP_CATCH2 _REQUIRED)
     unset(_REQ_PARAM)
 
     if(Catch2_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}WITH_CATCH2    1             )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}CATCH2_TARGETS Catch2::Catch2WithMain)
 
       if(WIN32)
@@ -568,7 +568,7 @@ macro(${_JCPRE}SETUP_CATCH2 _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with catch2       : ${${_JPPRE}WITH_CATCH2}")
 endmacro()
 
@@ -596,7 +596,7 @@ macro(${_JCPRE}SETUP_GLFW _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with glfw3        : ${${_JPPRE}WITH_GLFW3}")
 endmacro()
 
@@ -624,7 +624,7 @@ macro(${_JCPRE}SETUP_TBB _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with tbb          : ${${_JPPRE}WITH_TBB}")
 endmacro()
 
@@ -663,7 +663,7 @@ macro(${_JCPRE}SETUP_EMBREE _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with embree       : ${${_JPPRE}WITH_EMBREE}")
 endmacro()
 
@@ -691,7 +691,7 @@ macro(${_JCPRE}SETUP_ZLIB _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with zlib         : ${${_JPPRE}WITH_ZLIB}")
 endmacro()
 
@@ -719,7 +719,7 @@ macro(${_JCPRE}SETUP_PNG _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with PNG          : ${${_JPPRE}WITH_PNG}")
 endmacro()
 
@@ -738,9 +738,9 @@ macro(${_JCPRE}SETUP_FASTDXT _REQUIRED)
     unset(_REQ_PARAM)
 
     if(FastDXT_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                             ${_JPPRE}WITH_FASTDXT    1               )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                             ${_JPPRE}FASTDXT_TARGETS FastDXT::fastdxt)
 
       if(WIN32)
@@ -749,7 +749,7 @@ macro(${_JCPRE}SETUP_FASTDXT _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with fast dxt     : ${${_JPPRE}WITH_FASTDXT}")
 endmacro()
 
@@ -777,7 +777,7 @@ macro(${_JCPRE}SETUP_SQUISH _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with squish       : ${${_JPPRE}WITH_SQUISH}")
 endmacro()
 
@@ -796,9 +796,9 @@ macro(${_JCPRE}SETUP_IMGUI _REQUIRED)
     unset(_REQ_PARAM)
 
     if(ImGUI_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}WITH_IMGUI    1                     )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}IMGUI_TARGETS ImGUI::imgui_ogl3_glfw)
       if(WIN32)
         fixupTargetConfigs(ImGUI::imgui_ogl3_glfw)
@@ -806,7 +806,7 @@ macro(${_JCPRE}SETUP_IMGUI _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with imgui        : ${${_JPPRE}WITH_IMGUI}")
 endmacro()
 
@@ -835,12 +835,12 @@ macro(${_JCPRE}SETUP_CURL _REQUIRED)
         add_library(CURL::libcurl ALIAS CURL::libcurl_shared)
       endif()
 
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}WITH_CURL    1            )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}CURL_TARGETS CURL::libcurl)
       if(WIN32)
-        get_property(_lcat TARGET   "CURL::libcurl" 
+        get_property(_lcat TARGET   "CURL::libcurl"
                            PROPERTY ALIASED_TARGET)
         if(NOT "${_lac}" STREQUAL "")
           fixupTargetConfigs(CURL::libcurl)
@@ -850,7 +850,7 @@ macro(${_JCPRE}SETUP_CURL _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with curl         : ${${_JPPRE}WITH_CURL}")
 endmacro()
 
@@ -871,9 +871,9 @@ macro(${_JCPRE}SETUP_PROTOBUF _REQUIRED)
 
     if(Protobuf_FOUND)
 
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}WITH_PROTOBUF    1                    )
-      cmake_language(CALL ${_JCPRE}SET 
+      cmake_language(CALL ${_JCPRE}SET
                           ${_JPPRE}PROTOBUF_TARGETS protobuf::libprotobuf)
       if(WIN32)
         fixupTargetConfigs(protobuf::libprotobuf)
@@ -881,7 +881,7 @@ macro(${_JCPRE}SETUP_PROTOBUF _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with protobuf     : ${${_JPPRE}WITH_PROTOBUF}")
 endmacro()
 
@@ -905,18 +905,18 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
     unset(_REQ_PARAM)
 
     if(opentelemetry-cpp_FOUND)
-      cmake_language(CALL ${_JCPRE}SET 
-                          ${_JPPRE}WITH_OTEL    
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_OTEL
                           1                                          )
-      cmake_language(CALL ${_JCPRE}SET 
-                          ${_JPPRE}OTEL_TARGETS 
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}OTEL_TARGETS
                           opentelemetry-cpp::in_memory_span_exporter
                           opentelemetry-cpp::ostream_span_exporter
                           opentelemetry-cpp::otlp_file_exporter      )
 
       if(opentelemetry-cpp_exporters_otlp_http_FOUND)
-        cmake_language(CALL ${_JCPRE}SET 
-                            ${_JPPRE}OTEL_TARGETS 
+        cmake_language(CALL ${_JCPRE}SET
+                            ${_JPPRE}OTEL_TARGETS
                             ${${_JPPRE}OTEL_TARGETS}
                             opentelemetry-cpp::otlp_http_exporter)
       endif()
@@ -925,7 +925,7 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
         fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter     )
         fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter)
         fixupTargetConfigs(opentelemetry-cpp::ostream_span_exporter  )
- 
+
         fixupTargetConfigs(opentelemetry-cpp::common                 )
         fixupTargetConfigs(opentelemetry-cpp::proto                  )
         fixupTargetConfigs(opentelemetry-cpp::logs                   )
@@ -944,6 +944,6 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
     endif()
   endif()
 
-  list(APPEND ${_JPPRE}DEPENDENCY_STATES 
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with otel         : ${${_JPPRE}WITH_OTEL}")
 endmacro()

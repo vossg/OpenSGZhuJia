@@ -9,12 +9,12 @@ MACRO(SETUP_APPLICATION_TARGET)
 
     TARGET_LINK_LIBRARIES(${_APP_TARGET} ${TARGET_NAME})
 
-    INSTALL(TARGETS ${_APP_TARGET} 
+    INSTALL(TARGETS ${_APP_TARGET}
 
-            RUNTIME 
+            RUNTIME
                   DESTINATION        ${CMAKE_INSTALL_BINDIR}$<$<CONFIG:Debug>:/debug>
                   COMPONENT          run                                             )
 
-  ENDFOREACH() 
+  ENDFOREACH()
 
 ENDMACRO()

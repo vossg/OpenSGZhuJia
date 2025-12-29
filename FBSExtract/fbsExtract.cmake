@@ -27,11 +27,11 @@ ENDIF()
 
 IF(UNIX)
   IF($ENV{LD_LIBRARY_PATH})
-    SET(ENV{LD_LIBRARY_PATH} "$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64") 
-    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64") 
+    SET(ENV{LD_LIBRARY_PATH} "$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
+    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
   ELSE()
-    SET(ENV{LD_LIBRARY_PATH} "${BOOST_ROOT}/lib64") 
-    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=${BOOST_ROOT}/lib64") 
+    SET(ENV{LD_LIBRARY_PATH} "${BOOST_ROOT}/lib64")
+    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=${BOOST_ROOT}/lib64")
   ENDIF()
 
   MESSAGE(STATUS "running with LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH}")
@@ -43,7 +43,7 @@ FILE(GLOB_RECURSE FBSE_FILES RELATIVE ${I3DH_FLATBUFFERS_DIR}/schemes ${I3DH_FLA
 MESSAGE(STATUS "Found FBSE schemes: ${FBSE_FILES} from ${I3DH_FLATBUFFERS_DIR}/schemes")
 
 
-# include const gen utils and required const gen compiler depdendency 
+# include const gen utils and required const gen compiler depdendency
 FIND_PROGRAM(FbsExtractC fbsExtract fbsExtract.exe)
 
 IF(NOT FbsExtractC)

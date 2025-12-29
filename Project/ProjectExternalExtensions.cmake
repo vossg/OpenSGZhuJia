@@ -9,7 +9,7 @@ cmake_language(CALL ${_JCPRE}SET EXTRA_EXTERNAL_MODULES   "" CACHE STRING
 cmake_language(CALL ${_JCPRE}SET IGNORE_INSTALL           "" CACHE STRING
                     "Extra modules that OpenSG will build but not installed.")
 
-cmake_language(CALL ${_JCPRE}SET EXTERNAL_MODULES_INCLUDE "" CACHE FILEPATH 
+cmake_language(CALL ${_JCPRE}SET EXTERNAL_MODULES_INCLUDE "" CACHE FILEPATH
                     "Include file of extra modules"                          )
 
 if(EXISTS "${${_JPPRE}EXTERNAL_MODULES_INCLUDE}")
@@ -19,7 +19,7 @@ endif()
 foreach(_EXTERNAL ${${_JPPRE}EXTRA_EXTERNAL_MODULES})
   message(STATUS "processing external ${_EXTERNAL}")
 
-  cmake_language(CALL ${_JCPRE}OPTION ${_JTPRE}BUILD_${_EXTERNAL} 
+  cmake_language(CALL ${_JCPRE}OPTION ${_JTPRE}BUILD_${_EXTERNAL}
                       "Build using ${_EXTERNAL} module" OFF      )
 
   if(${_JTPRE}BUILD_${_EXTERNAL})
@@ -43,7 +43,7 @@ foreach(_EXTERNAL ${${_JPPRE}EXTRA_EXTERNAL_MODULES})
       set(_CMPFILE CMakeLists${_CMVER_}.PackagePrepare.cmake)
 
       if(EXISTS "${${_JPPRE}${_EXTERNAL}_SOURCE_DIR}/${_CMPFILE}")
-        list(APPEND ${_JPPRE}EXTERNAL_PREPARE 
+        list(APPEND ${_JPPRE}EXTERNAL_PREPARE
                       "${${_JPPRE}${_EXTERNAL}_SOURCE_DIR}")
       endif()
 

@@ -12,19 +12,19 @@ macro(${_JCPRE}SETUP_MAIN_PROJECT _VMAJOR _VMINOR _VPATCH)
   SET(${${_JPPRE}TARGET_NAME_UC}_VERSION_MINOR ${_VMINOR})
   SET(${${_JPPRE}TARGET_NAME_UC}_VERSION_PATCH ${_VPATCH})
 
-  SET(${${_JPPRE}TARGET_NAME_UC}_VERSION_STRING 
+  SET(${${_JPPRE}TARGET_NAME_UC}_VERSION_STRING
       ${${${_JPPRE}TARGET_NAME_UC}_VERSION_MAJOR}.${${${_JPPRE}TARGET_NAME_UC}_VERSION_MINOR}.${${${_JPPRE}TARGET_NAME_UC}_VERSION_PATCH})
 
   SET(${_JPPRE}TARGET_LIST "" CACHE INTERNAL "")
 
-  IF((CMAKE_VERSION VERSION_GREATER_EQUAL "3.29.0") AND 
+  IF((CMAKE_VERSION VERSION_GREATER_EQUAL "3.29.0") AND
      (${_JCPRE}EXPORT_PACKAGE_DEPENDENCIES        )    )
 
-    SET(_CMAKE_WITH_PACKAGE_DEP                         
+    SET(_CMAKE_WITH_PACKAGE_DEP
            TRUE                                )
-    SET( CMAKE_EXPERIMENTAL_EXPORT_PACKAGE_DEPENDENCIES 
+    SET( CMAKE_EXPERIMENTAL_EXPORT_PACKAGE_DEPENDENCIES
            1942b4fa-b2c5-4546-9385-83f254070067)
-    SET(_EXPORT_PACKAGE_DEPENDENCIES_PARAM_ 
+    SET(_EXPORT_PACKAGE_DEPENDENCIES_PARAM_
            "EXPORT_PACKAGE_DEPENDENCIES"       )
 
   ELSE()
@@ -144,7 +144,7 @@ endmacro()
 
 macro(${_JCPRE}DO_ADD_DIRECTORY _DIRNAME _PRIVATE)
 
-  cmake_language(CALL ${_JCPRE}MSG 
+  cmake_language(CALL ${_JCPRE}MSG
                       "  Adding directory: ${_DIRNAME} ${_PRIVATE}")
 
   set(_ADD_SRC_LOOKUP         )
@@ -194,12 +194,12 @@ macro(${_JCPRE}DO_ADD_DIRECTORY _DIRNAME _PRIVATE)
 
     list(APPEND _ADD_SRC_LOOKUP          "${_RESDIR}/${_FILE_PREFIX}*.cpp"     )
     list(APPEND _ADD_HDR_LOOKUP          "${_RESDIR}/${_FILE_PREFIX}*.h"       )
- 
+
     list(APPEND _ADD_INL_LOOKUP          "${_RESDIR}/${_FILE_PREFIX}*.inl"     )
     list(APPEND _ADD_INS_LOOKUP          "${_RESDIR}/${_FILE_PREFIX}*.ins"     )
     list(APPEND _ADD_LL_LOOKUP           "${_RESDIR}/${_FILE_PREFIX}*.ll"      )
     list(APPEND _ADD_YY_LOOKUP           "${_RESDIR}/${_FILE_PREFIX}*.yy"      )
-    list(APPEND _ADD_${_JGSUF_UC}_LOOKUP 
+    list(APPEND _ADD_${_JGSUF_UC}_LOOKUP
                 "${_RESDIR}/${_FILE_PREFIX}*.${_JGSUF}")
     list(APPEND _ADD_LPP_LOOKUP          "${_RESDIR}/${_FILE_PREFIX}*.lpp"     )
     list(APPEND _ADD_Y_LOOKUP            "${_RESDIR}/${_FILE_PREFIX}*.y"       )
@@ -216,12 +216,12 @@ macro(${_JCPRE}DO_ADD_DIRECTORY _DIRNAME _PRIVATE)
 
     cmake_language(CALL ${_JCPRE}MSG "    glob ll    with : ${_ADD_LL_LOOKUP}" )
     cmake_language(CALL ${_JCPRE}MSG "    glob yy    with : ${_ADD_YY_LOOKUP}" )
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                         "    glob ${_JGSUF} with: ${_ADD_${_JGSUF_UC}_LOOKUP}" )
 
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                         "    glob utest with : ${_ADD_UTEST_LOOKUP}")
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                         "    glob ubench with: ${_ADD_UBENCH_LOOKUP}")
   endif()
 
@@ -288,11 +288,11 @@ macro(${_JCPRE}DO_ADD_DIRECTORY _DIRNAME _PRIVATE)
 
     cmake_language(CALL ${_JCPRE}MSG "    got ll         : ${_LOCAL_LL} "      )
     cmake_language(CALL ${_JCPRE}MSG "    got yy         : ${_LOCAL_YY} "      )
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                           "    got ${_JGSUF} : ${_LOCAL_${_JGSUF_UC}}")
 
     cmake_language(CALL ${_JCPRE}MSG "    got utest src  : ${_LOCAL_UTEST_SRC}")
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                           "    got ubench src : ${_LOCAL_UBENCH_SRC}")
 
     cmake_language(CALL ${_JCPRE}MSG "    got test src   : ${_LOCAL_TEST_SRC}" )
@@ -381,16 +381,16 @@ endif()
 
 
   if(TRUE)
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                      "    got src      : ${${${_JPPRE}TARGET_NAME}_SRC}"     )
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                      "    got hdr      : ${${${_JPPRE}TARGET_NAME}_HDR}"     )
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                      "    got inl      : ${${${_JPPRE}TARGET_NAME}_INL}"     )
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                      "    got ins      : ${${${_JPPRE}TARGET_NAME}_INS}"     )
 
-    cmake_language(CALL ${_JCPRE}MSG 
+    cmake_language(CALL ${_JCPRE}MSG
                      "    got ll       : ${${${_JPPRE}TARGET_NAME}_LL}"      )
     cmake_language(CALL ${_JCPRE}MSG
                      "    got yy       : ${${${_JPPRE}TARGET_NAME}_YY}"      )
@@ -426,7 +426,7 @@ macro(${_JCPRE}INIT_LIBRARY_PROJECT PRJ_NAME)
 
   set(${_JPPRE}TARGET_NAME ${PROJECT_NAME})
 
-  option(${_JTPRE}BUILD_${${_JPPRE}TARGET_NAME} 
+  option(${_JTPRE}BUILD_${${_JPPRE}TARGET_NAME}
          "Build the ${${_JPPRE}TARGET_NAME} library" ON)
 
   if(NOT OSG_DISABLE_SOURCE_GROUPS)
@@ -473,7 +473,7 @@ macro(${_JCPRE}ADD_FLEX_BISON_PARSERS)
 
       list(APPEND ${${_JPPRE}TARGET_NAME}_SRC ${_YYSrc})
       list(APPEND ${${_JPPRE}TARGET_NAME}_HDR ${_YYHdr})
- 
+
     endforeach()
 
     foreach(_LLFile ${${${_JPPRE}TARGET_NAME}_LL})
@@ -505,7 +505,7 @@ macro(${_JCPRE}ADD_FLEX_BISON_PARSERS)
     endforeach()
 
     if(${${_JPPRE}TARGET_NAME}_YY OR ${${_JPPRE}TARGET_NAME}_LL)
-      list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR 
+      list(APPEND ${${_JPPRE}TARGET_NAME}_PUBLIC_INCDIR
                   ${CMAKE_CURRENT_BINARY_DIR}          )
     endif()
 
@@ -545,7 +545,7 @@ macro(${_JCPRE}ADD_CODE_GEN)
           list(APPEND ${${_JPPRE}TARGET_NAME}_SRC ${FCDDir}/${FCDClassCpp})
           list(APPEND ${${_JPPRE}TARGET_NAME}_HDR ${FCDDir}/${FCDClassHdr})
           list(APPEND ${${_JPPRE}TARGET_NAME}_INL ${FCDDir}/${FCDClassInl})
-        endif() 
+        endif()
       endif()
 
       cmake_language(CALL ${_JCPRE}ADD_CODE_GEN_CMDS ${_GenDir}
@@ -584,29 +584,29 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   cmake_language(CALL ${_JCPRE}ADD_CODE_GEN          )
 
 
-  add_library(${${_JPPRE}TARGET_NAME} SHARED ${${${_JPPRE}TARGET_NAME}_SRC} 
-                                             ${${${_JPPRE}TARGET_NAME}_INL} 
-                                             ${${${_JPPRE}TARGET_NAME}_INS} 
+  add_library(${${_JPPRE}TARGET_NAME} SHARED ${${${_JPPRE}TARGET_NAME}_SRC}
+                                             ${${${_JPPRE}TARGET_NAME}_INL}
+                                             ${${${_JPPRE}TARGET_NAME}_INS}
                                              ${${${_JPPRE}TARGET_NAME}_HDR})
 
-  add_library(${${_JPPRE}PROJECT_TARGET_NAME}::${${_JPPRE}TARGET_NAME} 
+  add_library(${${_JPPRE}PROJECT_TARGET_NAME}::${${_JPPRE}TARGET_NAME}
                 ALIAS ${${_JPPRE}TARGET_NAME})
 
-  set(${_JPPRE}TARGET_LIST ${${_JPPRE}TARGET_LIST};${${_JPPRE}TARGET_NAME} 
+  set(${_JPPRE}TARGET_LIST ${${_JPPRE}TARGET_LIST};${${_JPPRE}TARGET_NAME}
         CACHE INTERNAL "")
 
 
   source_group("Inline Files" FILES ${${${_JPPRE}TARGET_NAME}_INL})
   source_group("Inline Files" FILES ${${${_JPPRE}TARGET_NAME}_INS})
 
-  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL} 
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL}
                                 PROPERTIES HEADER_FILE_ONLY TRUE)
-  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS} 
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS}
                                 PROPERTIES HEADER_FILE_ONLY TRUE)
 
-  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL} 
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INL}
                                  PROPERTIES LANGUAGE CXX        )
-  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS} 
+  set_source_files_properties(${${${_JPPRE}TARGET_NAME}_INS}
                                  PROPERTIES LANGUAGE CXX        )
 
 
@@ -616,8 +616,8 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
     target_include_directories(
       ${${_JPPRE}TARGET_NAME}
       PRIVATE   ${_PUB_INCDIR}
-	  INTERFACE $<BUILD_INTERFACE:${_PUB_INCDIR}>
-	            $<INSTALL_INTERFACE:include/${CMAKE_PROJECT_NAME}>)
+      INTERFACE $<BUILD_INTERFACE:${_PUB_INCDIR}>
+                $<INSTALL_INTERFACE:include/${CMAKE_PROJECT_NAME}>)
   endforeach()
 
   foreach(_PUB_SYS_INCDIR ${${${_JPPRE}TARGET_NAME}_PUBLIC_SYS_INCDIR})
@@ -625,8 +625,8 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
       ${${_JPPRE}TARGET_NAME}
       SYSTEM
       PRIVATE   ${_PUB_SYS_INCDIR}
-	  INTERFACE $<BUILD_INTERFACE:${_PUB_SYS_INCDIR}>
-	            $<INSTALL_INTERFACE:include/${CMAKE_PROJECT_NAME}>)
+      INTERFACE $<BUILD_INTERFACE:${_PUB_SYS_INCDIR}>
+                $<INSTALL_INTERFACE:include/${CMAKE_PROJECT_NAME}>)
   endforeach()
 
   foreach(_PRIV_SYS_INCDIR ${${${_JPPRE}TARGET_NAME}_PRIVATE_SYS_INCDIR})
@@ -634,7 +634,7 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
       ${${_JPPRE}TARGET_NAME}
       SYSTEM
       PRIVATE   ${_PRIV_SYS_INCDIR}
-	  INTERFACE $<BUILD_INTERFACE:${_PRIV_SYS_INCDIR}>)
+      INTERFACE $<BUILD_INTERFACE:${_PRIV_SYS_INCDIR}>)
   endforeach()
 
 
@@ -643,29 +643,29 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
     PRIVATE $<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang>:LINKER:--no-undefined>
     PRIVATE $<$<COMPILE_LANG_AND_ID:CXX,GNU>:LINKER:--no-undefined>)
 
-  set_property(TARGET ${${_JPPRE}TARGET_NAME} 
+  set_property(TARGET ${${_JPPRE}TARGET_NAME}
                PROPERTY
                  PUBLIC_HEADER "${${${_JPPRE}TARGET_NAME}_PUBLIC_HDR}")
-  set_property(TARGET ${${_JPPRE}TARGET_NAME} 
+  set_property(TARGET ${${_JPPRE}TARGET_NAME}
                APPEND PROPERTY
                  PUBLIC_HEADER "${${${_JPPRE}TARGET_NAME}_PUBLIC_INL}")
 
-  set_property(TARGET ${${_JPPRE}TARGET_NAME} 
+  set_property(TARGET ${${_JPPRE}TARGET_NAME}
                PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-  set_property(TARGET ${${_JPPRE}TARGET_NAME} 
+  set_property(TARGET ${${_JPPRE}TARGET_NAME}
                PROPERTY VERSION   ${${_CPN_UC}_VERSION_STRING})
 
-  set_property(TARGET ${${_JPPRE}TARGET_NAME} 
+  set_property(TARGET ${${_JPPRE}TARGET_NAME}
                PROPERTY SOVERSION ${${_CPN_UC}_VERSION_MAJOR} )
 
   if(_TARGET_COMPILE_TAG)
-    set_property(TARGET ${${_JPPRE}TARGET_NAME} 
-                 PROPERTY 
+    set_property(TARGET ${${_JPPRE}TARGET_NAME}
+                 PROPERTY
                    DEFINE_SYMBOL ${_TARGET_COMPILE_TAG})
   else()
-    set_property(TARGET ${${_JPPRE}TARGET_NAME} 
-                 PROPERTY 
+    set_property(TARGET ${${_JPPRE}TARGET_NAME}
+                 PROPERTY
                    DEFINE_SYMBOL COMPILE_${${_JPPRE}TARGET_NAME_UC}LIB)
   endif()
 
@@ -674,7 +674,7 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
                  PROPERTY DEBUG_POSTFIX           D)
   endif()
 
-  target_link_libraries(${${_JPPRE}TARGET_NAME} 
+  target_link_libraries(${${_JPPRE}TARGET_NAME}
                         PUBLIC ${_JTPRE}::compiler_settings)
 
 
@@ -687,22 +687,22 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   endforeach()
 
   foreach(_PRIV_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_PRIVATE_DEP_TARGETS})
-    target_link_libraries(${${_JPPRE}TARGET_NAME} PRIVATE 
+    target_link_libraries(${${_JPPRE}TARGET_NAME} PRIVATE
                             ${${_PRIV_DEP_TARGET}})
   endforeach()
 
   foreach(_TARGET_PUB_DEF ${${${_JPPRE}TARGET_NAME}_PUBLIC_DEFINES})
-    target_compile_definitions(${${_JPPRE}TARGET_NAME} INTERFACE 
+    target_compile_definitions(${${_JPPRE}TARGET_NAME} INTERFACE
                                                          ${_TARGET_PUB_DEF})
   endforeach()
 
   foreach(_TARGET_PRIV_DEF ${${${_JPPRE}TARGET_NAME}_PRIVATE_DEFINES})
-    target_compile_definitions(${${_JPPRE}TARGET_NAME} PRIVATE 
+    target_compile_definitions(${${_JPPRE}TARGET_NAME} PRIVATE
                                                          ${_TARGET_PRIV_DEF})
   endforeach()
 
 
-  install(EXPORT      ${${_JPPRE}TARGET_NAME}Targets 
+  install(EXPORT      ${${_JPPRE}TARGET_NAME}Targets
           NAMESPACE   ${${_JPPRE}PROJECT_TARGET_NAME}::
           DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME}
           COMPONENT   dev
@@ -717,7 +717,7 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   set(_CFG_COMPILER_CFG ${${_JTPRE}CompilerConfigString})
 
   configure_package_config_file(
-    ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/LibConfig.cmake.in 
+    ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/LibConfig.cmake.in
     ${${_JPPRE}TARGET_NAME}Config.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
 
@@ -732,28 +732,28 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME}
     COMPONENT   dev                                                         )
 
-  install(TARGETS              ${${_JPPRE}TARGET_NAME} 
+  install(TARGETS              ${${_JPPRE}TARGET_NAME}
 
           EXPORT               ${${_JPPRE}TARGET_NAME}Targets
 
-	      ARCHIVE 
+          ARCHIVE
             DESTINATION        ${CMAKE_INSTALL_LIBDIR}$<$<CONFIG:Debug>:/debug>
             COMPONENT          dev
 
-          LIBRARY 
+          LIBRARY
             DESTINATION        ${CMAKE_INSTALL_LIBDIR}$<$<CONFIG:Debug>:/debug>
             COMPONENT          run
             NAMELINK_COMPONENT dev
 
-          RUNTIME 
+          RUNTIME
             DESTINATION        ${CMAKE_INSTALL_BINDIR}$<$<CONFIG:Debug>:/debug>
             COMPONENT          run
 
-          PUBLIC_HEADER 
+          PUBLIC_HEADER
             DESTINATION        ${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME}
             COMPONENT          dev                                              )
 
-  set(${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS 
+  set(${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS
         ${${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS} CACHE INTERNAL "")
 
 
@@ -857,7 +857,7 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
       endif()
     endforeach()
   endif()
-    
+
   if(${_JPPRE}BUILD_UNITBENCH)
     # build test programs
     foreach(_EXE_SRC ${${${_JPPRE}TARGET_NAME}_UBENCH_SRC})
@@ -927,7 +927,7 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
   if(${_JPPRE}BUILD_APPS AND _APP_DEPENDENCIES_VALID)
     # build test programs
     foreach(_APP_EXE_SRC ${${${_JPPRE}TARGET_NAME}_APP_SRC})
-     
+
       get_filename_component(_APP_EXE ${_APP_EXE_SRC} NAME_WE)
 
       add_executable(${_APP_EXE} ${${_JPPRE}EXCLUDE_APPS} ${_APP_EXE_SRC})
@@ -950,9 +950,9 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
         target_link_libraries(${_APP_EXE} PRIVATE ${${_APP_DEP_TARGET}})
       endforeach()
 
-      install(TARGETS ${_APP_EXE} 
+      install(TARGETS ${_APP_EXE}
 
-              RUNTIME 
+              RUNTIME
                 DESTINATION ${CMAKE_INSTALL_BINDIR}$<$<CONFIG:Debug>:/debug>
                 COMPONENT   run                                             )
 
@@ -964,7 +964,7 @@ endfunction()
 function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   if(${_JPPRE}CMAKE_PASS STREQUAL "main")
     if(NOT ${${_JPPRE}TARGET_NAME}_NO_LIB)
-      cmake_language(CALL ${_JCPRE}DO_SETUP_LIBRARY_TARGET 
+      cmake_language(CALL ${_JCPRE}DO_SETUP_LIBRARY_TARGET
                             ${_TARGET_COMPILE_TAG}        )
     endif()
   elseif(${_JPPRE}CMAKE_PASS STREQUAL "secondary")
@@ -977,7 +977,7 @@ function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
       endif()
     endforeach()
 
-    set(${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS 
+    set(${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS
             ${${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS} CACHE INTERNAL "")
 
     cmake_language(CALL ${_JCPRE}DO_SETUP_APP_TARGETS)
@@ -1002,7 +1002,7 @@ function(${_JCPRE}SETUP_CONFIGURED_H _SRC_CFGFILE _TARGET_CFGFILE)
     file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
   endforeach()
 
-  file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" 
+  file(APPEND "${_TARGET_CFGFILE}.tmp.cmake"
               "\n#endif // _${_JCPRE}CONFIGURED_H_\n")
 
   configure_file("${_TARGET_CFGFILE}.tmp.cmake"
@@ -1026,7 +1026,7 @@ function(${_JCPRE}SETUP_CONFIGURED_VERSION_H _SRC_CFGFILE _TARGET_CFGFILE)
     file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" "\n${_ADD_CONFIGURE_LINE}\n")
   endforeach()
 
-  file(APPEND "${_TARGET_CFGFILE}.tmp.cmake" 
+  file(APPEND "${_TARGET_CFGFILE}.tmp.cmake"
               "\n#endif // _${_JCPRE}CONFIGUREDVERSIONS_H_\n")
 
   configure_file("${_TARGET_CFGFILE}.tmp.cmake"

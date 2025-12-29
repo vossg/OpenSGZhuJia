@@ -11,20 +11,20 @@ FUNCTION(extract_fbs_to_cpp_opt_ret SRC_FBEGEN OPT RET)
 
   add_custom_command(
     OUTPUT ${I3DH_FBE_OUT_DIR}/${FBEGEN_HEADER}
-    COMMAND ${__LD_LIBRARY_PATH}  
+    COMMAND ${__LD_LIBRARY_PATH}
             "${FbsExtractC}"
             --cpp ${OPT}
-#            --cpp-private-enum 
+#            --cpp-private-enum
 #            --cpp-include-generated
             --gen-out-dir
             --out-suffix _gen
             --out "${I3DH_FBE_OUT_DIR}/${SRC_FBEGEN_DIR}"
             --files "${I3DH_FLATBUFFERS_DIR}/schemes/${SRC_FBEGEN}"
     MAIN_DEPENDENCY ${I3DH_FLATBUFFERS_DIR}/schemes/${SRC_FBEGEN}
-    
+
     COMMENT "=================== Generating ${SRC_FBEGEN} fbsExtract Header file ... expected output ${I3DH_FBE_OUT_DIR}/${FBEGEN_HEADER}"
     DEPENDS ${FbsExtractC} ${I3DH_FLATBUFFERS_DIR}/schemes/${SRC_FBEGEN}                                                                  )
-    
+
   SET(${RET} ${I3DH_FBE_OUT_DIR}/${FBEGEN_HEADER} PARENT_SCOPE)
 ENDFUNCTION()
 

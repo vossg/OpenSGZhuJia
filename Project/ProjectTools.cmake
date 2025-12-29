@@ -14,7 +14,7 @@ macro(${_JCPRE}COMMON_TARGETS)
   if(${_JPPRE}BUILD_TESTS)
     add_custom_target(             ${_JTPRE}AllTests)
     add_dependencies (${_JTPRE}All ${_JTPRE}AllTests)
-  endif() 
+  endif()
 
   if(${_JPPRE}BUILD_UNITTESTS)
     add_custom_target(             ${_JTPRE}AllUTests)
@@ -55,18 +55,18 @@ endmacro()
 function(fixupTargetConfigs _tgt)
 
   if(WIN32)
-    set_property(TARGET ${_tgt} 
+    set_property(TARGET ${_tgt}
                  PROPERTY MAP_IMPORTED_CONFIG_DEBUGOPT     Debug  )
 
-    set_property(TARGET ${_tgt} 
+    set_property(TARGET ${_tgt}
                  PROPERTY MAP_IMPORTED_CONFIG_RELEASENOOPT Release)
   endif()
 
   if(WIN32)
-    set_property(TARGET ${_tgt} 
+    set_property(TARGET ${_tgt}
                  PROPERTY MAP_IMPORTED_CONFIG_DEBUGGV      Debug  )
 
-    set_property(TARGET ${_tgt} 
+    set_property(TARGET ${_tgt}
                  PROPERTY MAP_IMPORTED_CONFIG_RELEASEGV    Release)
   endif()
 
@@ -82,25 +82,25 @@ macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
 
   if(GIT_FOUND)
     if(EXISTS ${DIRECTORY}/.git)
-    
+
       execute_process(COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
                       WORKING_DIRECTORY ${DIRECTORY}
-                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_COUNT 
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_COUNT
                       OUTPUT_STRIP_TRAILING_WHITESPACE                )
 
       EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
                       WORKING_DIRECTORY ${DIRECTORY}
-                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_ABBREV_HEAD 
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_ABBREV_HEAD
                       OUTPUT_STRIP_TRAILING_WHITESPACE                )
 
       EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
                       WORKING_DIRECTORY ${DIRECTORY}
-                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_HEAD 
+                      OUTPUT_VARIABLE _${NAME}_WC_REVISION_HEAD
                       OUTPUT_STRIP_TRAILING_WHITESPACE                )
 
       EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} show -s --format=%ai HEAD
                       WORKING_DIRECTORY ${DIRECTORY}
-                      OUTPUT_VARIABLE ${NAME}_WC_REVISION_DATE 
+                      OUTPUT_VARIABLE ${NAME}_WC_REVISION_DATE
                       OUTPUT_STRIP_TRAILING_WHITESPACE                )
 
       SET(${NAME}_WC_REVISION_ID "${_${NAME}_WC_REVISION_COUNT}_${_${NAME}_WC_REVISION_ABBREV_HEAD}_${_${NAME}_WC_REVISION_HEAD}")
@@ -110,7 +110,7 @@ macro(${_JCPRE}FIND_REVISION_GIT DIRECTORY NAME)
   ELSE()
     SET(${NAME}_WC_REVISION -2)
   ENDIF()
-  
+
 endmacro() # FIND_REVISION_GIT)
 
 
@@ -118,13 +118,13 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
 
   find_package(Git)
 
-  add_custom_target(${PNAME}CreateVersionFile 
-                    ALL 
+  add_custom_target(${PNAME}CreateVersionFile
+                    ALL
                     COMMENT  "${PName} create version files")
 
   if(NOT WIN32)
     add_custom_command(
-      TARGET ${PNAME}CreateVersionFile 
+      TARGET ${PNAME}CreateVersionFile
       POST_BUILD
       COMMAND echo "################### ${PNAME} #################" >  ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
       COMMAND echo -n "head: "                                      >> ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt
@@ -144,7 +144,7 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
     )
   else()
     add_custom_command(
-      TARGET ${PNAME}CreateVersionFile 
+      TARGET ${PNAME}CreateVersionFile
       POST_BUILD
       COMMAND ${ZhuJiaSourceDir}/Project/createVersionFile.bat ${GIT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PNAME}Versions.txt ${PNAME}
       WORKING_DIRECTORY ${DIRECTORY}
@@ -189,7 +189,7 @@ macro(${_JCPRE}COLLECT_LIBRARIES)
   message(STATUS "processing ${_LIB_CFG_FILES}")
 
   foreach(_LIB_CFG ${_LIB_CFG_FILES})
-    string(REGEX MATCH Source/Contrib 
+    string(REGEX MATCH Source/Contrib
            _FOUND_CONTRIB_CFG ${_LIB_CFG})
 
     if(_FOUND_CONTRIB_CONFIG)
@@ -314,7 +314,7 @@ macro(${_JCPRE}RUN_PASSES)
   foreach(PASS ${${_JPPRE}CMAKE_PASSES})
     set(${_JPPRE}CMAKE_PASS ${PASS})
 
-    message(STATUS 
+    message(STATUS
             "\nPASS : ${${_JPPRE}CMAKE_PASS} in ${${_JPPRE}PASSDIR_${PASS}}\n")
 
     foreach(_LIBCONFIGFILE ${${_JPPRE}LIBRARY_CONFIG_FILES})
@@ -325,7 +325,7 @@ macro(${_JCPRE}RUN_PASSES)
       string(REPLACE "CMakeLists${_CMVER_}.Lib." "" _LIBFILENAME "${_LIBFILENAME}")
       string(REPLACE ".txt"                      "" _LIBFILENAME "${_LIBFILENAME}")
 
-      string(REGEX MATCH ${_JTPRE}Contrib*|${_JTPRE}Test* 
+      string(REGEX MATCH ${_JTPRE}Contrib*|${_JTPRE}Test*
                      _${_JPPRE}IS_CONTRIBLIB ${_LIBFILENAME})
 
       if(_${_JPPRE}IS_CONTRIBLIB)
@@ -334,7 +334,7 @@ macro(${_JCPRE}RUN_PASSES)
         set(${_JPPRE}MAIN_LIB_TARGET ${_JTPRE}AllCoreLibs   )
       endif()
 
-      add_subdirectory("${_LIBCONFIGDIR}" 
+      add_subdirectory("${_LIBCONFIGDIR}"
                        "${${_JPPRE}PASSDIR_${PASS}}/${_LIBFILENAME}")
 
     endforeach() # _LIBCONFIGFILE
@@ -403,8 +403,8 @@ macro(${_JCPRE}SORT_TARGET_LIST)
 
   list(REVERSE _TARGETLIST_RESULT)
 
-  set(${_JPPRE}SORTED_TARGET_LIST ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
-  set(PROJECT_SORTED_TARGET_LIST  ${_TARGETLIST_RESULT} CACHE INTERNAL "") 
+  set(${_JPPRE}SORTED_TARGET_LIST ${_TARGETLIST_RESULT} CACHE INTERNAL "")
+  set(PROJECT_SORTED_TARGET_LIST  ${_TARGETLIST_RESULT} CACHE INTERNAL "")
 
   message(STATUS "sorted targets :")
   message(STATUS "  ${${_JPPRE}SORTED_TARGET_LIST}")
@@ -434,21 +434,21 @@ macro(${_JCPRE}EXPORT_MAIN_PROJECT)
     COMPATIBILITY SameMajorVersion                                        )
 
   configure_package_config_file(
-#    ${CMAKE_ROOT_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in 
-    ${ZhuJiaSourceDir}/Project/ProjectConfig.cmake.in 
+#    ${CMAKE_ROOT_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake.in
+    ${ZhuJiaSourceDir}/Project/ProjectConfig.cmake.in
     ${${_JPPRE}TARGET_NAME}Config.cmake
 
     INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME})
 
 
-  install(FILES       
+  install(FILES
             ${PROJECT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}Config.cmake
             ${PROJECT_BINARY_DIR}/${${_JPPRE}TARGET_NAME}ConfigVersion.cmake
 
-          DESTINATION 
-            ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME} 
+          DESTINATION
+            ${CMAKE_INSTALL_LIBDIR}/cmake/${${_JPPRE}TARGET_NAME}
 
-          COMPONENT   
+          COMPONENT
             dev                                                            )
 
 endmacro()
