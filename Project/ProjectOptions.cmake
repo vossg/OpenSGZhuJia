@@ -62,6 +62,9 @@ endif(WIN32)
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_OTEL
                "Use OTEL"                                             ON )
 
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_PROMETHEUS
+               "Use Prometheus"                                       ON )
+
 ## Tests
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_TESTS

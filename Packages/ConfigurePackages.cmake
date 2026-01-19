@@ -886,6 +886,42 @@ macro(${_JCPRE}SETUP_PROTOBUF _REQUIRED)
 endmacro()
 
 ########################################
+# Prometheus
+########################################
+
+macro(${_JCPRE}SETUP_PROMETHEUS _REQUIRED)
+
+  if(NOT prometheus-cpp_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(prometheus-cpp ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
+
+    if(prometheus-cpp_FOUND)
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_PROMETHEUS
+                          1                          )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}PROMETHEUS_TARGETS
+                          prometheus-cpp::core
+                          prometheus-cpp::push       )
+
+
+      if(WIN32)
+        fixupTargetConfigs(prometheus-cpp::core      )
+        fixupTargetConfigs(prometheus-cpp::push      )
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with prometheus   : ${${_JPPRE}WITH_PROMETHEUS}")
+endmacro()
+
+########################################
 # OpenTelemetry
 ########################################
 
@@ -921,6 +957,13 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
                             opentelemetry-cpp::otlp_http_exporter)
       endif()
 
+      if(opentelemetry-cpp_exporters_prometheus_FOUND)
+        cmake_language(CALL ${_JCPRE}SET
+                            ${_JPPRE}OTEL_TARGETS
+                            ${${_JPPRE}OTEL_TARGETS}
+                            opentelemetry-cpp::prometheus_exporter)
+      endif()
+
       if(WIN32)
         fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter     )
         fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter)
@@ -939,6 +982,9 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
           fixupTargetConfigs(opentelemetry-cpp::otlp_http_exporter)
           fixupTargetConfigs(opentelemetry-cpp::otlp_http_client  )
           fixupTargetConfigs(opentelemetry-cpp::http_client_curl  )
+        endif()
+        if(opentelemetry-cpp_exporters_prometheus_FOUND)
+          fixupTargetConfigs(opentelemetry-cpp::prometheus_exporter)
         endif()
       endif()
     endif()
