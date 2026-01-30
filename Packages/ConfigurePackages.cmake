@@ -948,13 +948,15 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
                           ${_JPPRE}OTEL_TARGETS
                           opentelemetry-cpp::in_memory_span_exporter
                           opentelemetry-cpp::ostream_span_exporter
-                          opentelemetry-cpp::otlp_file_exporter      )
+                          opentelemetry-cpp::otlp_file_exporter
+                          opentelemetry-cpp::otlp_file_metric_exporter)
 
       if(opentelemetry-cpp_exporters_otlp_http_FOUND)
         cmake_language(CALL ${_JCPRE}SET
                             ${_JPPRE}OTEL_TARGETS
                             ${${_JPPRE}OTEL_TARGETS}
-                            opentelemetry-cpp::otlp_http_exporter)
+                            opentelemetry-cpp::otlp_http_exporter
+                            opentelemetry-cpp::otlp_http_metric_exporter)
       endif()
 
       if(opentelemetry-cpp_exporters_prometheus_FOUND)
@@ -965,23 +967,25 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
       endif()
 
       if(WIN32)
-        fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter     )
-        fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter)
-        fixupTargetConfigs(opentelemetry-cpp::ostream_span_exporter  )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_exporter       )
+        fixupTargetConfigs(opentelemetry-cpp::in_memory_span_exporter  )
+        fixupTargetConfigs(opentelemetry-cpp::ostream_span_exporter    )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_metric_exporter)
 
-        fixupTargetConfigs(opentelemetry-cpp::common                 )
-        fixupTargetConfigs(opentelemetry-cpp::proto                  )
-        fixupTargetConfigs(opentelemetry-cpp::logs                   )
-        fixupTargetConfigs(opentelemetry-cpp::resources              )
-        fixupTargetConfigs(opentelemetry-cpp::trace                  )
-        fixupTargetConfigs(opentelemetry-cpp::metrics                )
-        fixupTargetConfigs(opentelemetry-cpp::otlp_recordable        )
-        fixupTargetConfigs(opentelemetry-cpp::otlp_file_client       )
+        fixupTargetConfigs(opentelemetry-cpp::common                   )
+        fixupTargetConfigs(opentelemetry-cpp::proto                    )
+        fixupTargetConfigs(opentelemetry-cpp::logs                     )
+        fixupTargetConfigs(opentelemetry-cpp::resources                )
+        fixupTargetConfigs(opentelemetry-cpp::trace                    )
+        fixupTargetConfigs(opentelemetry-cpp::metrics                  )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_recordable          )
+        fixupTargetConfigs(opentelemetry-cpp::otlp_file_client         )
 
         if(opentelemetry-cpp_exporters_otlp_http_FOUND)
-          fixupTargetConfigs(opentelemetry-cpp::otlp_http_exporter)
-          fixupTargetConfigs(opentelemetry-cpp::otlp_http_client  )
-          fixupTargetConfigs(opentelemetry-cpp::http_client_curl  )
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_exporter       )
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_client         )
+          fixupTargetConfigs(opentelemetry-cpp::http_client_curl         )
+          fixupTargetConfigs(opentelemetry-cpp::otlp_http_metric_exporter)
         endif()
         if(opentelemetry-cpp_exporters_prometheus_FOUND)
           fixupTargetConfigs(opentelemetry-cpp::prometheus_exporter)
