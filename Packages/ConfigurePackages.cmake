@@ -54,9 +54,12 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
   if(Boost_FOUND)
 
     add_library(Boost::custom_definitions INTERFACE IMPORTED)
-    set_property(TARGET Boost::custom_definitions
-                   PROPERTY INTERFACE_COMPILE_DEFINITIONS
-                     "BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1")
+    set_target_properties(Boost::custom_definitions
+                          PROPERTIES
+                            INTERFACE_COMPILE_DEFINITIONS
+                              "BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1"
+                            INTERFACE_COMPILE_DEFINITIONS
+                              "BOOST_SYSTEM_NO_DEPRECATED=1"            )
 
     set(        ${_JPPRE}BOOST_TARGETS Boost::dynamic_linking    )
     list(APPEND ${_JPPRE}BOOST_TARGETS Boost::disable_autolinking)
@@ -66,10 +69,13 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
     string(APPEND ${_JTPRE}CompilerConfigString
              "\nif(NOT TARGET Boost::custom_definitions)\n"
              "  add_library(Boost::custom_definitions INTERFACE IMPORTED)\n"
-             "  set_property(TARGET Boost::custom_definitions\n"
-             "                 PROPERTY INTERFACE_COMPILE_DEFINITIONS\n"
-             "                   \"BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE"
-                                                                      "=1\")\n"
+             "  set_target_properties(\n"
+             "      Boost::custom_definitions\n"
+             "        PROPERTIES \n"
+             "          INTERFACE_COMPILE_DEFINITIONS  \n"
+             "            \"BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE=1\"\n"
+             "          INTERFACE_COMPILE_DEFINITIONS  \n"
+             "            \"BOOST_SYSTEM_NO_DEPRECATED=1\")\n"
              "endif()\n")
 
   endif() # Boost_FOUND
@@ -852,6 +858,46 @@ macro(${_JCPRE}SETUP_CURL _REQUIRED)
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with curl         : ${${_JPPRE}WITH_CURL}")
+endmacro()
+
+########################################
+# nghttp2 | as given by curl
+########################################
+
+macro(${_JCPRE}SETUP_NGHTTP2 _REQUIRED)
+
+  if(NOT nghttp2_FOUND)
+
+    if(LINUX)
+      message(FATAL_ERROR "nghttp2 not required on linux")
+    else()
+      if(EXISTS "${nghttp2_DIR}/nghttp2-targets.cmake")
+        include("${nghttp2_DIR}/nghttp2-targets.cmake")
+      endif()
+    endif()
+
+    if(TARGET nghttp2::nghttp2)
+      cmake_language(CALL ${_JCPRE}SET
+                          nghttp2_FOUND TRUE)
+    endif()
+
+    if(nghttp2_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_NGHTTP2    1               )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}NGHTTP2_TARGETS nghttp2::nghttp2)
+
+      if(WIN32)
+        fixupTargetConfigs(nghttp2::nghttp2)
+      endif()
+    elseif(${_REQUIRED})
+      message(FATAL_ERROR "nghttp2 not found but required : ${nghttp2_DIR}")
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with nghttp2      : ${${_JPPRE}WITH_NGHTTP2}")
 endmacro()
 
 ########################################
