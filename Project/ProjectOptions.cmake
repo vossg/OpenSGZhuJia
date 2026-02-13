@@ -12,7 +12,7 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_SSE4     ""    ON )
 cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}SSE4_VARIANT
                     "4.2" CACHE STRING "")
 
-cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_AVX      ""    OFF)
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_AVX      ""    ON )
 cmake_language(CALL ${_JCPRE}SET    ${_JPPRE}AVX_VARIANT
                     ""    CACHE STRING "")
 
@@ -55,6 +55,11 @@ if(WIN32)
   cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}INSTALL_PDB_FILES     "" OFF)
   cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}WINDOWS_LINK_OPTIMIZE "" OFF)
 endif(WIN32)
+
+
+## Visibility
+
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}VISIBILITY_HIDDEN "" ON)
 
 
 ## Features

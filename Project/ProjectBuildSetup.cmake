@@ -47,9 +47,15 @@ set(CXX_STANDARD_REQUIRED TRUE)
 # Visibility
 ##############################################################################
 
-set(CMAKE_CXX_VISIBILITY_PRESET     hidden CACHE INTERNAL "")
-set(CMAKE_C_VISIBILITY_PRESET       hidden CACHE INTERNAL "")
-set(CMAKE_VISIBILITY_INLINES_HIDDEN true   CACHE INTERNAL "")
+if(${_JPPRE}VISIBILITY_HIDDEN)
+  set(CMAKE_CXX_VISIBILITY_PRESET     hidden CACHE INTERNAL "")
+  set(CMAKE_C_VISIBILITY_PRESET       hidden CACHE INTERNAL "")
+  set(CMAKE_VISIBILITY_INLINES_HIDDEN true   CACHE INTERNAL "")
+else()
+  set(CMAKE_CXX_VISIBILITY_PRESET     default CACHE INTERNAL "")
+  set(CMAKE_C_VISIBILITY_PRESET       default CACHE INTERNAL "")
+  set(CMAKE_VISIBILITY_INLINES_HIDDEN false   CACHE INTERNAL "")
+endif()
 
 ##############################################################################
 # config export
