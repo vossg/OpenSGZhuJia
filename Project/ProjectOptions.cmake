@@ -67,6 +67,9 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}VISIBILITY_HIDDEN "" ON)
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_OTEL
                "Use OTEL"                                             ON )
 
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}OTEL_METRIC_ABI_V2
+               "Use OTEL Metric ABV v2"                               OFF)
+
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_PROMETHEUS
                "Use Prometheus"                                       ON )
 

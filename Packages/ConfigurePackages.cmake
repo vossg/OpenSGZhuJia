@@ -932,6 +932,68 @@ macro(${_JCPRE}SETUP_PROTOBUF _REQUIRED)
 endmacro()
 
 ########################################
+# absl
+########################################
+
+macro(${_JCPRE}SETUP_ABSL _REQUIRED)
+  if(NOT absl_FOUND)
+
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(absl ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
+
+    if(absl_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_ABSL    1            )
+#      cmake_language(CALL ${_JCPRE}SET
+#                          ${_JPPRE}ABSL_TARGETS ::libprotobuf)
+#      if(WIN32)
+#        fixupTargetConfigs(protobuf::libprotobuf)
+#      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with absl     : ${${_JPPRE}WITH_ABSL}")
+endmacro()
+
+########################################
+# utf8_range
+########################################
+
+macro(${_JCPRE}SETUP_UTF8RANGE _REQUIRED)
+  if(NOT utf8_range_FOUND)
+
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(utf8_range ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
+
+    if(absl_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_UTF8RANGE  1         )
+#      cmake_language(CALL ${_JCPRE}SET
+#                          ${_JPPRE}ABSL_TARGETS ::libprotobuf)
+#      if(WIN32)
+#        fixupTargetConfigs(protobuf::libprotobuf)
+#      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with utf8_range   : ${${_JPPRE}WITH_UTF8RANGE}")
+endmacro()
+
+########################################
 # Prometheus
 ########################################
 
@@ -972,6 +1034,16 @@ endmacro()
 ########################################
 
 macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
+
+  if(${_JPPRE}OTEL_METRIC_ABI_V2)
+    if(NOT absl_FOUND)
+      cmake_language(CALL ${_JCPRE}SETUP_ABSL ${_REQUIRED})
+    endif()
+
+    if(NOT utf8_range_FOUND)
+      cmake_language(CALL ${_JCPRE}SETUP_UTF8RANGE ${_REQUIRED})
+    endif()
+  endif()
 
   if(NOT Protobuf_FOUND)
     cmake_language(CALL ${_JCPRE}SETUP_PROTOBUF ${_REQUIRED})
