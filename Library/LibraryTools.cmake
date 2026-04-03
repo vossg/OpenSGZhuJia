@@ -519,7 +519,7 @@ endmacro()
 
 macro(${_JCPRE}ADD_CODE_GEN)
 
-  if(${_JPPRE}ENABLE_${_JGSUF_UC}2CODE AND PYTHONINTERP_FOUND)
+  if(${_JPPRE}ENABLE_${_JGSUF_UC}2CODE AND Python3_Interpreter_FOUND)
 
     foreach(_GenFile ${${${_JPPRE}TARGET_NAME}_${_JGSUF_UC}})
 
@@ -563,7 +563,7 @@ macro(${_JCPRE}ADD_CODE_GEN)
 
     endforeach() #${_JGSUF_UC}File
 
-  endif() # ${_JPPRE}ENABLE_FCD2CODE AND PYTHONINTERP_FOUND
+  endif() # ${_JPPRE}ENABLE_FCD2CODE AND Python3_Interpreter_FOUND
 endmacro()
 
 ###############
