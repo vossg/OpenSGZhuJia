@@ -1,5 +1,17 @@
 
 ########################################
+# setup
+########################################
+
+if(LINUX)
+  set (       CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH OFF                        )
+  list(FILTER CMAKE_SYSTEM_PREFIX_PATH               EXCLUDE REGEX "^/opt"      )
+  list(FILTER CMAKE_SYSTEM_PREFIX_PATH               EXCLUDE REGEX "^/usr/X11R6")
+  list(FILTER CMAKE_SYSTEM_PREFIX_PATH               EXCLUDE REGEX "^/usr/pkg"  )
+  list(FILTER CMAKE_SYSTEM_PREFIX_PATH               EXCLUDE REGEX "^/$"  )
+endif()
+
+########################################
 # boost
 ########################################
 
@@ -43,6 +55,8 @@ macro(${_JCPRE}SETUP_BOOST _COMPONENTS _INDIRECT_COMPONENTS _REQUIRED)
 
   message(STATUS
           "  looking for boost components: ${${_COMPONENTS}} | ${_REQ_PARAM}")
+  message(STATUS
+          "    in : ${Boost_DIR} | ${BOOST_ROOT}")
 
 #  set(Boost_VERBOSE TRUE)
 #  set(Boost_DEBUG TRUE)
@@ -1114,4 +1128,99 @@ macro(${_JCPRE}SETUP_OPENTELEMETRY _REQUIRED)
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with otel         : ${${_JPPRE}WITH_OTEL}")
+endmacro()
+
+########################################
+# X11
+########################################
+
+macro(${_JCPRE}SETUP_X11 _REQUIRED)
+  if(NOT Freetype_FOUND)
+    cmake_language(CALL ${_JCPRE}SETUP_FREETYPE2 ${_REQUIRED})
+  endif()
+
+  if(NOT Fontconfig_FOUND)
+    cmake_language(CALL ${_JCPRE}SETUP_FONTCONFIG ${_REQUIRED})
+  endif()
+
+  if(NOT X11_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(X11 ${_REQ_PARAM})
+
+    unset(_REQ_PARAM)
+
+    if(X11_FOUND)
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_X11    1       )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}X11_TARGETS X11::X11)
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with x11          : ${${_JPPRE}WITH_X11}")
+endmacro()
+
+########################################
+# freetype 2
+########################################
+
+macro(${_JCPRE}SETUP_FREETYPE2 _REQUIRED)
+  if(NOT Freetype_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Freetype ${_REQ_PARAM})
+
+    unset(_REQ_PARAM)
+
+    if(Freetype_FOUND)
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_FREETYPE2    1                 )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_FT2          1                 )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}FREETYPE2_TARGETS Freetype::Freetype)
+    endif()
+  endif()
+
+  if(NOT _${_JPPRE}_FREETYPE2_STATUS_ADDED)
+    list(APPEND ${_JPPRE}DEPENDENCY_STATES
+                "with freetype2    : ${${_JPPRE}WITH_FREETYPE2}")
+
+    set(_${_JPPRE}_FREETYPE2_STATUS_ADDED 1)
+  endif()
+endmacro()
+
+########################################
+# fontconfig
+########################################
+
+macro(${_JCPRE}SETUP_FONTCONFIG _REQUIRED)
+  if(NOT Fontconfig_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Fontconfig ${_REQ_PARAM})
+
+    unset(_REQ_PARAM)
+
+    if(Freetype_FOUND)
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_FONTCONFIG    1                     )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}FONTCONFIG_TARGETS Fontconfig::Fontconfig)
+    endif()
+  endif()
+
+  if(NOT _${_JPPRE}_FONTCONFIG_STATUS_ADDED)
+    list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with fontconfig   : ${${_JPPRE}WITH_FONTCONFIG}")
+    set(_${_JPPRE}_FREETYPE2_STATUS_ADDED 1)
+  endif()
 endmacro()
