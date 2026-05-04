@@ -98,6 +98,7 @@ macro(${_JCPRE}RESET_LIBRARY_PROJECT)
   set(${${_JPPRE}TARGET_NAME}_APP_DEP_TARGETS     "" CACHE INTERNAL "")
 
   set(${${_JPPRE}TARGET_NAME}_PUBLIC_DEFINES      "" CACHE INTERNAL "")
+  set(${${_JPPRE}TARGET_NAME}_INTERFACE_DEFINES   "" CACHE INTERNAL "")
   set(${${_JPPRE}TARGET_NAME}_PRIVATE_DEFINES     "" CACHE INTERNAL "")
 
 
@@ -692,8 +693,13 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   endforeach()
 
   foreach(_TARGET_PUB_DEF ${${${_JPPRE}TARGET_NAME}_PUBLIC_DEFINES})
-    target_compile_definitions(${${_JPPRE}TARGET_NAME} INTERFACE
+    target_compile_definitions(${${_JPPRE}TARGET_NAME} PUBLIC
                                                          ${_TARGET_PUB_DEF})
+  endforeach()
+
+  foreach(_TARGET_IF_DEF ${${${_JPPRE}TARGET_NAME}_INTERFACE_DEFINES})
+    target_compile_definitions(${${_JPPRE}TARGET_NAME} INTERFACE
+                                                         ${_TARGET_IF_DEF})
   endforeach()
 
   foreach(_TARGET_PRIV_DEF ${${${_JPPRE}TARGET_NAME}_PRIVATE_DEFINES})
