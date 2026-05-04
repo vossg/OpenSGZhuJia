@@ -676,7 +676,10 @@ function(${_JCPRE}DO_SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   endif()
 
   target_link_libraries(${${_JPPRE}TARGET_NAME}
-                        PUBLIC ${_JTPRE}::compiler_settings)
+                        PUBLIC  ${_JTPRE}::compiler_settings)
+
+  target_link_libraries(${${_JPPRE}TARGET_NAME}
+                        PRIVATE ${_JTPRE}::project_defines  )
 
 
   foreach(_PUB_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_PUB_PRJ_TARGETS})
@@ -829,6 +832,8 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
         target_link_libraries(${_EXE} PRIVATE ${${_TST_DEP_TARGET}})
       endforeach()
 
+      target_link_libraries(${_EXE} PRIVATE ${_JTPRE}::project_defines   )
+
     endforeach()
   endif()
 
@@ -850,6 +855,8 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
       endif()
 
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
+
+      target_link_libraries(${_EXE} PRIVATE ${_JTPRE}::project_defines)
 
       if(WIN32)
         set(_DLL_PATH "DL_PATHS" "$<TARGET_RUNTIME_DLL_DIRS:${_EXE}>")
@@ -882,6 +889,8 @@ function(${_JCPRE}DO_SETUP_TEST_TARGETS)
       endif()
 
       target_link_libraries(${_EXE} PRIVATE ${${_JPPRE}CATCH2_TARGETS})
+
+      target_link_libraries(${_EXE} PRIVATE ${_JTPRE}::project_defines)
 
       if(NOT SENLIN_EXCLUDE_BENCH_FROM_TEST)
         if(WIN32)
@@ -955,6 +964,8 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
       foreach(_APP_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_APP_DEP_TARGETS})
         target_link_libraries(${_APP_EXE} PRIVATE ${${_APP_DEP_TARGET}})
       endforeach()
+
+      target_link_libraries(${_APP_EXE} PRIVATE ${_JTPRE}::project_defines)
 
       install(TARGETS ${_APP_EXE}
 

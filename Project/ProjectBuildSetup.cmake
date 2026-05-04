@@ -400,6 +400,7 @@ endif()
 string(APPEND ${_JTPRE}CompilerConfigString
          "\nendif()\n")
 
+add_library(${_JTPRE}::project_defines INTERFACE IMPORTED         )
 
 ##############################################################################
 # bookkeeping
@@ -423,3 +424,9 @@ if(MSVC)
       "${CMAKE_C_FLAGS_RELWITHDEBINFO}"
       CACHE INTERNAL ""                  )
 endif()
+
+macro(${_JCPRE}ADD_PROJECT_DEFINE DEFINE)
+  target_compile_definitions(${_JTPRE}::project_defines INTERFACE
+                                                        ${DEFINE})
+
+endmacro()
