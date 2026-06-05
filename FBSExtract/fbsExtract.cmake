@@ -1,71 +1,102 @@
 
-MESSAGE(STATUS "processing fbs extract /${SENLIN_WITH_FBSEXTRACT}")
+message(STATUS "processing fbs extract "
+               "/${${_JPPRE}WITH_FBSEXTRACT} | ${EXTLIBSDIR}")
 
-IF(NOT SENLIN_WITH_FBSEXTRACT)
-  RETURN()
-ENDIF()
+if(NOT ${_JPPRE}WITH_FBSEXTRACT)
+  return()
+endif()
 
-SET(FBS_PROJECT_NAME ${I3DH_FLATBUFFER_TARGETS})
+set(FBS_PROJECT_NAME ${I3DH_FLATBUFFER_TARGETS})
 
-SET(PROJECT_NAME i3dhubFbsExtract)
+set(PROJECT_NAME i3dhubFbsExtract)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.30)
 
-IF(DEFINED ENV{_IREXTLIBS_ROOT})
-  IF(EXISTS $ENV{_IREXTLIBS_ROOT})
-    LIST(APPEND CMAKE_PROGRAM_PATH $ENV{_IREXTLIBS_ROOT}/consumer/diben/bin)
-  ENDIF()
-ELSEIF(DEFINED IREXTLIBS_ROOT)
-  IF(EXISTS ${IREXTLIBS_ROOT})
-    LIST(APPEND CMAKE_PROGRAM_PATH ${IREXTLIBS_ROOT}/consumer/diben/bin)
-  ENDIF()
-ELSEIF(DEFINED IREXTLIB_ROOT)
-  IF(EXISTS ${IREXTLIB_ROOT})
-    LIST(APPEND CMAKE_PROGRAM_PATH ${IREXTLIB_ROOT}/consumer/diben/bin)
-  ENDIF()
-ENDIF()
+if(DEFINED ENV{EXTLIBSDIR})
+  if(EXISTS $ENV{EXTLIBSDIR})
+    list(APPEND CMAKE_PROGRAM_PATH $ENV{EXTLIBSDIR}/consumer/diben/bin)
+  endif()
+elseif(DEFINED EXTLIBSDIR)
+  if(EXISTS ${EXTLIBSDIR})
+    list(APPEND CMAKE_PROGRAM_PATH ${EXTLIBSDIR}/consumer/diben/bin)
+  endif()
+elseif(DEFINED ENV{_IREXTLIBS_ROOT})
+  if(EXISTS $ENV{_IREXTLIBS_ROOT})
+    list(APPEND CMAKE_PROGRAM_PATH $ENV{_IREXTLIBS_ROOT}/consumer/diben/bin)
+  endif()
+elseif(DEFINED IREXTLIBS_ROOT)
+  if(EXISTS ${IREXTLIBS_ROOT})
+    list(APPEND CMAKE_PROGRAM_PATH ${IREXTLIBS_ROOT}/consumer/diben/bin)
+  endif()
+elseif(DEFINED IREXTLIB_ROOT)
+  if(EXISTS ${IREXTLIB_ROOT})
+    list(APPEND CMAKE_PROGRAM_PATH ${IREXTLIB_ROOT}/consumer/diben/bin)
+  endif()
+endif()
 
-IF(UNIX)
-  IF($ENV{LD_LIBRARY_PATH})
-    SET(ENV{LD_LIBRARY_PATH} "$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
-    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
-  ELSE()
-    SET(ENV{LD_LIBRARY_PATH} "${BOOST_ROOT}/lib64")
-    SET(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=${BOOST_ROOT}/lib64")
-  ENDIF()
+message(STATUS "  looking in ${CMAKE_PROGRAM_PATH}")
 
-  MESSAGE(STATUS "running with LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH}")
-ENDIF()
+if(UNIX)
+  if($ENV{LD_LIBRARY_PATH})
+    set(ENV{LD_LIBRARY_PATH} "$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
+    set(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${BOOST_ROOT}/lib64")
+  else()
+    set(ENV{LD_LIBRARY_PATH} "${BOOST_ROOT}/lib64")
+    set(__LD_LIBRARY_PATH "LD_LIBRARY_PATH=${BOOST_ROOT}/lib64")
+  endif()
 
-#check if specific directories were whitelisted
-FILE(GLOB_RECURSE FBSE_FILES RELATIVE ${I3DH_FLATBUFFERS_DIR}/schemes ${I3DH_FLATBUFFERS_DIR}/schemes/*.fbs)
+  message(STATUS "  running with LD_LIBRARY_PATH $ENV{LD_LIBRARY_PATH}")
+endif()
 
-MESSAGE(STATUS "Found FBSE schemes: ${FBSE_FILES} from ${I3DH_FLATBUFFERS_DIR}/schemes")
+if(DEFINED Flatbuffers_whitelist_DIRS OR DEFINED Flatbuffers_whitelist_FILES)
+  message(STATUS "  running whitelisted: ${Flatbuffers_whitelist_DIRS} | ${Flatbuffers_whitelist_FILES}")
+  set(FBSE_FILES ) 
+  if(DEFINED Flatbuffers_whitelist_DIRS)
+    foreach(dir ${Flatbuffers_whitelist_DIRS})
+      file(GLOB_RECURSE FBSE_FILES_TMP RELATIVE ${I3DH_FLATBUFFERS_DIR}/schemes 
+                                                ${I3DH_FLATBUFFERS_DIR}/schemes/${dir}/*.fbs)
+      list(APPEND FBSE_FILES ${FBSE_FILES_TMP})
+    endforeach(dir)
+  endif()
+  if(DEFINED Flatbuffers_whitelist_FILES)
+    list(APPEND FBSE_FILES ${Flatbuffers_whitelist_FILES})
+  endif()  
+else()
+  #check if specific directories were whitelisted
+  file(GLOB_RECURSE FBSE_FILES RELATIVE ${I3DH_FLATBUFFERS_DIR}/schemes 
+                                        ${I3DH_FLATBUFFERS_DIR}/schemes/*.fbs)
+endif()
+
+
+message(STATUS "  Found FBSE schemes: ${FBSE_FILES} from "
+               "${I3DH_FLATBUFFERS_DIR}/schemes"          )
 
 
 # include const gen utils and required const gen compiler depdendency
-FIND_PROGRAM(FbsExtractC fbsExtract fbsExtract.exe)
+find_program(FbsExtractC fbsExtract fbsExtract.exe)
 
-IF(NOT FbsExtractC)
-  RETURN()
-ENDIF()
+if(NOT FbsExtractC)
+  message(STATUS "  fbsExtract not found")
 
-INCLUDE(${CMAKE_CURRENT_LIST_DIR}/fbsExtractUtils.cmake)
+  return()
+endif()
 
-SET(FBEGEN_HEADER_FILES )
+include(${CMAKE_CURRENT_LIST_DIR}/fbsExtractUtils.cmake)
 
-FOREACH(FBEFile ${FBSE_FILES})
+set(FBEGEN_HEADER_FILES )
+
+foreach(FBEFile ${FBSE_FILES})
     extract_fbs_to_cpp_opt_ret(${FBEFile} "" FBEGEN_HEADER)
     list(APPEND FBEGEN_HEADER_FILES ${FBEGEN_HEADER})
-ENDFOREACH(FBEFile)
+endforeach(FBEFile)
 
 
-ADD_CUSTOM_TARGET(
+add_custom_target(
     ${PROJECT_NAME}_generator
     ALL
     SOURCES ${FBEGEN_HEADER_FILES})
 
 
-ADD_DEPENDENCIES(${FBS_PROJECT_NAME}_generator ${PROJECT_NAME}_generator )
+add_dependencies(${FBS_PROJECT_NAME}_generator ${PROJECT_NAME}_generator )
 
 #MESSAGE(FATAL_ERROR "FBEGEN_HEADER_FILES : ${FBEGEN_HEADER_FILES}")
