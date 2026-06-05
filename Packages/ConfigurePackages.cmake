@@ -1224,3 +1224,27 @@ macro(${_JCPRE}SETUP_FONTCONFIG _REQUIRED)
     set(_${_JPPRE}_FREETYPE2_STATUS_ADDED 1)
   endif()
 endmacro()
+
+########################################
+# eigen
+########################################
+
+macro(${_JCPRE}SETUP_EIGEN3 _REQUIRED)
+  if(NOT Eigen3_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Eigen3 ${_REQ_PARAM} CONFIG)
+
+    unset(_REQ_PARAM)
+
+    if(Eigen3_FOUND)
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_EIGEN3    1            )
+      cmake_language(CALL ${_JCPRE}SET ${_JPPRE}EIGEN3_TARGETS Eigen3::Eigen)
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with eigen3       : ${${_JPPRE}WITH_EIGEN3}")
+endmacro()
