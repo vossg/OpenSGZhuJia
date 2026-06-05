@@ -1248,3 +1248,38 @@ macro(${_JCPRE}SETUP_EIGEN3 _REQUIRED)
   list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with eigen3       : ${${_JPPRE}WITH_EIGEN3}")
 endmacro()
+
+########################################
+# glut
+########################################
+
+macro(${_JCPRE}SETUP_GLUT _REQUIRED)
+  if(NOT GLUT_FOUND)
+
+    if(WIN32)
+      set(_GLUT_CFG CONFIG)
+    endif()
+
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(GLUT ${_REQ_PARAM} ${_GLUT_CFG})
+
+    unset(_REQ_PARAM)
+
+    if(GLUT_FOUND)
+
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}WITH_GLUT    1         )
+      cmake_language(CALL ${_JCPRE}SET
+                          ${_JPPRE}GLUT_TARGETS GLUT::GLUT)
+      if(WIN32)
+        fixupTargetConfigs(GLUT::GLUT)
+      endif()
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with glut         : ${${_JPPRE}WITH_GLUT}")
+endmacro()
