@@ -929,8 +929,8 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
 
   foreach(_APP_PRJ_TARGET ${${${_JPPRE}TARGET_NAME}_APP_PRJ_TARGETS})
     if(NOT TARGET ${_APP_PRJ_TARGET})
-      message(NOTICE "  app dependency ${_APP_PRJ_TARGET} missing, "
-                     "skipping apps"                               )
+      message(WARNING "  app dependency ${_APP_PRJ_TARGET} missing, "
+                      "skipping apps"                               )
       set(_APP_DEPENDENCIES_VALID FALSE)
     endif()
   endforeach()
@@ -938,8 +938,8 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
   if(_APP_DEPENDENCIES_VALID)
     foreach(_APP_DEP_TARGET ${${${_JPPRE}TARGET_NAME}_APP_DEP_TARGETS})
       if(NOT TARGET ${${_APP_DEP_TARGET}})
-        message(NOTICE "  app dependency ${_APP_DEP_TARGET} missing, "
-                       "skipping apps"                               )
+        message(WARNING "  app dependency ${_APP_DEP_TARGET} missing, "
+                        "skipping apps"                               )
         set(_APP_DEPENDENCIES_VALID FALSE)
       endif()
     endforeach()

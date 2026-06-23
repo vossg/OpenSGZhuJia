@@ -393,7 +393,7 @@ macro(${_JCPRE}SETUP_YAMLCPP _REQUIRED)
   endif()
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES
-              "with yamp-cpp     : ${${_JPPRE}WITH_YAMLCPP}")
+              "with yaml-cpp     : ${${_JPPRE}WITH_YAMLCPP}")
 endmacro()
 
 ########################################
