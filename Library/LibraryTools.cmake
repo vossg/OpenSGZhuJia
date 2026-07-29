@@ -953,6 +953,14 @@ function(${_JCPRE}DO_SETUP_APP_TARGETS)
 
       add_executable(${_APP_EXE} ${${_JPPRE}EXCLUDE_APPS} ${_APP_EXE_SRC})
 
+      if(DEFINED ${_JPPRE}map_${_APP_EXE})
+        set_target_properties(${_APP_EXE} PROPERTIES OUTPUT_NAME ${${_JPPRE}map_${_APP_EXE}})
+      elseif(DEFINED ${_JPPRE}map_app)
+        string(REGEX REPLACE "^app(.*)$" "${${_JPPRE}map_app}\\1" _APP_EXE_FIXUP ${_APP_EXE})
+
+        set_target_properties(${_APP_EXE} PROPERTIES OUTPUT_NAME ${_APP_EXE_FIXUP})
+      endif()
+
       if(${_JPPRE}ALL_APP_TARGET)
         add_dependencies(${${_JPPRE}ALL_APP_TARGET} ${_APP_EXE})
       else()
@@ -1008,6 +1016,18 @@ function(${_JCPRE}SETUP_LIBRARY_TARGET _TARGET_COMPILE_TAG)
   else()
     message(FATAL_ERROR "unknown pass")
   endif()
+endfunction()
+
+function(${_JCPRE}INSTALL_PUBLIC_HEADER_DIRECTORY _DIR)
+  install(DIRECTORY             ${_DIR}/
+          DESTINATION           ${CMAKE_INSTALL_INCLUDEDIR}/${CMAKE_PROJECT_NAME}
+          FILE_PERMISSIONS                    OWNER_WRITE OWNER_READ
+                                                          GROUP_READ
+                                                          WORLD_READ
+          DIRECTORY_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+                                GROUP_EXECUTE             GROUP_READ
+                                WORLD_EXECUTE             WORLD_READ
+          COMPONENT             dev                                              )
 endfunction()
 
 ###############

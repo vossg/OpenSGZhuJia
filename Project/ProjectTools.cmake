@@ -157,7 +157,8 @@ macro(${_JCPRE}CREATE_VERSIONFILE DIRECTORY PNAME)
           DESTINATION share/${PNAME}
           PERMISSIONS OWNER_WRITE OWNER_READ
                                   GROUP_READ
-                                  WORLD_READ)
+                                  WORLD_READ
+          COMPONENT   run                   )
 
   MESSAGE(STATUS "foo : ${DIRECTORY} ${PNAME}  | ")
 
