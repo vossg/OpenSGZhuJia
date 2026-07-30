@@ -73,6 +73,17 @@ cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}OTEL_METRIC_ABI_V2
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}ENABLE_PROMETHEUS
                "Use Prometheus"                                       ON )
 
+
+## Graphics APIs
+
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}NO_OPENGL
+               "Disable OpenGL"                                       OFF)
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}NO_EGL
+               "Disable EGL"                                          OFF)
+cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}NO_D3D
+               "Disable Direct3D"                                     OFF)
+
+
 ## Tests
 
 cmake_language(CALL ${_JCPRE}OPTION ${_JPPRE}BUILD_TESTS
