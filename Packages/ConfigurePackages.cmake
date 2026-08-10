@@ -725,9 +725,14 @@ macro(${_JCPRE}SETUP_PNG _REQUIRED)
       set(_REQ_PARAM "REQUIRED")
     endif()
 
-    find_package(PNG ${_REQ_PARAM}) # CONFIG)
+    if(WIN32)
+      set(_CFG_PARAM CONFIG)
+    endif()
+
+    find_package(PNG ${_REQ_PARAM} ${_CFG_PARAM})
 
     unset(_REQ_PARAM)
+    unset(_CFG_PARAM)
 
     if(PNG_FOUND)
       cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_PNG    1       )

@@ -146,7 +146,7 @@ endif()
 
 if(MSVC)
   if(NOT ${_JPPRE}WIN_VERSION)
-    set(${_JPPRE}WIN_VERSION "0x0601" CACHE STRING "" FORCE)
+    set(${_JPPRE}WIN_VERSION "0x0602" CACHE STRING "" FORCE)
   endif()
 
   set(CMAKE_CXX_STANDARD_LIBRARIES "" CACHE STRING "cleaned default" FORCE)
