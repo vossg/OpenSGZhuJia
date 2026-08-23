@@ -11,6 +11,9 @@ if(LINUX)
   list(FILTER CMAKE_SYSTEM_PREFIX_PATH               EXCLUDE REGEX "^/$"  )
 endif()
 
+list(APPEND            CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/Find")
+list(REMOVE_DUPLICATES CMAKE_MODULE_PATH                                 )
+
 ########################################
 # boost
 ########################################
@@ -713,6 +716,66 @@ macro(${_JCPRE}SETUP_ZLIB _REQUIRED)
 
   list(APPEND ${_JPPRE}DEPENDENCY_STATES
               "with zlib         : ${${_JPPRE}WITH_ZLIB}")
+endmacro()
+
+########################################
+# brotli
+########################################
+
+macro(${_JCPRE}SETUP_BROTLIENCODE _REQUIRED)
+  if(NOT Brotli_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Brotli ${_REQ_PARAM}) # CONFIG)
+
+    unset(_REQ_PARAM)
+  endif()
+
+  if(Brotli_FOUND AND BrotliEncode_FOUND)
+    cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_BROTLIENCODE 1       )
+    cmake_language(CALL list APPEND
+                          ${_JPPRE}BROTLI_TARGETS "Brotli::BrotliEncode")
+    cmake_language(CALL list REMOVE_DUPLICATES
+                          ${_JPPRE}BROTLI_TARGETS                       )
+
+    if(WIN32)
+      fixupTargetConfigs(Brotli::BrotliCommon)
+      fixupTargetConfigs(Brotli::BrotliEncode)
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with brotliencode : ${${_JPPRE}WITH_BROTLIENCODE}")
+endmacro()
+
+macro(${_JCPRE}SETUP_BROTLIDECODE _REQUIRED)
+  if(NOT Brotli_FOUND)
+    if(${_REQUIRED})
+      set(_REQ_PARAM "REQUIRED")
+    endif()
+
+    find_package(Brotli ${_REQ_PARAM}) # CONFIG)
+
+    unset(_REQ_PARAM)
+  endif()
+
+  if(Brotli_FOUND AND BrotliDecode_FOUND)
+    cmake_language(CALL ${_JCPRE}SET ${_JPPRE}WITH_BROTLIDECODE 1       )
+    cmake_language(CALL list APPEND
+                          ${_JPPRE}BROTLI_TARGETS "Brotli::BrotliDecode")
+    cmake_language(CALL list REMOVE_DUPLICATES
+                          ${_JPPRE}BROTLI_TARGETS                       )
+
+    if(WIN32)
+      fixupTargetConfigs(Brotli::BrotliCommon)
+      fixupTargetConfigs(Brotli::BrotliDecode)
+    endif()
+  endif()
+
+  list(APPEND ${_JPPRE}DEPENDENCY_STATES
+              "with brotlidecode : ${${_JPPRE}WITH_BROTLIDECODE}")
 endmacro()
 
 ########################################
