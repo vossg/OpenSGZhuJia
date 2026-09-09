@@ -37,6 +37,41 @@ macro(${_JCPRE}COMMON_TARGETS)
 endmacro()
 
 #############################################################################
+# graphviz target
+#############################################################################
+
+macro(${_JCPRE}ADD_GRAPHVIZ)
+
+  set(_GVIZ_DOT "${CMAKE_SOURCE_DIR}/Knowledge/Input/CMake/cmake_dependencies.dot")
+
+  add_custom_target(${_JTPRE}GraphViz)
+
+  add_custom_target(${_JTPRE}GraphVizGen
+                    VERBATIM
+                    USES_TERMINAL
+                    COMMAND ${CMAKE_COMMAND} "--graphviz=${_GVIZ_DOT}" .
+                    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"             )
+
+  add_dependencies(${_JTPRE}GraphViz ${_JTPRE}GraphVizGen)
+
+
+  if(${_JPPRE}DOXY_HAVE_DOT)
+    add_custom_target(${_JTPRE}GraphVizDot
+                      VERBATIM
+                      USES_TERMINAL
+                      COMMAND ${DOXYGEN_DOT_EXECUTABLE} -Tpdf "${_GVIZ_DOT}"
+                                                        -o    cmake_dependencies.pdf
+                      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"                       )
+
+    add_dependencies (${_JTPRE}GraphViz    ${_JTPRE}GraphVizDot)
+    add_dependencies (${_JTPRE}GraphVizDot ${_JTPRE}GraphVizGen)
+  endif()
+
+  unset(_GVIZ_DOT)
+
+endmacro()
+
+#############################################################################
 # import target mapping
 #############################################################################
 
